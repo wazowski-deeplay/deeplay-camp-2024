@@ -60,6 +60,11 @@ class BotTest {
 
             return availableMoves.get(random.nextInt(availableMoves.size()));
         }
+
+        @Override
+        protected List buyFleets() {
+            return  List.of(Ship.ShipType.BASIC);
+        }
     }
 
     private Field field;
@@ -99,6 +104,8 @@ class BotTest {
 
         game.createShips(startShips, player.getName());
         game.createShips(startShips, player2.getName());
+        player.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 10);
+        player2.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 10);
 
         final Answer answer = bot.getAnswer(game.getField());
 

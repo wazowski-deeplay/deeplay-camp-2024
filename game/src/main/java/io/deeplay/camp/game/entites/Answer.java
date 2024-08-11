@@ -37,15 +37,18 @@ public class Answer {
     }
 
     public Answer(Move move, String responseTime, List<Ship.ShipType> shipList) {
-        if (move == null) {
-            throw new IllegalArgumentException("Move cannot be null.");
-        }
+//        if (move == null) {
+//            throw new IllegalArgumentException("Move cannot be null.");
+//        }
         if (responseTime == null) {
             throw new IllegalArgumentException("Response time cannot be null.");
         }
         this.move = move;
         this.responseTime = responseTime;
         this.shipList = shipList;
+    }
+    public Answer(final List<Ship.ShipType> shipList) {
+        this(null, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), shipList);
     }
 
     public Move getMove() {

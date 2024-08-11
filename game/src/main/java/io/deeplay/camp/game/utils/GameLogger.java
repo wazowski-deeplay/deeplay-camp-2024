@@ -63,6 +63,8 @@ public class GameLogger implements GalaxyListener {
     public void addCredits() {
         game.addCredits();
         logger.info("Начисление очков игры игрокам");
+        logger.info("Баланс " + game.players[0].getName() + " - " + game.players[0].getTotalGamePoints());
+        logger.info("Баланс " + game.players[1].getName() + " - " + game.players[1].getTotalGamePoints());
     }
 
     @Override

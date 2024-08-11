@@ -44,6 +44,29 @@ public class RandomBot extends Bot {
         return availableMoves.get(random.nextInt(availableMoves.size()));
     }
 
+    @Override
+    public List<Ship.ShipType> buyFleets() {
+        List<Ship.ShipType> shipList = new ArrayList<>();
+        final Player player = game.getPlayerByName(name);
+        Ship.ShipType[] shipTypes = Ship.ShipType.values();
+        int pointsBeforeBuy = player.getTotalGamePoints();
+        int pointsAfterBuy = player.getTotalGamePoints();
+
+        while (true) {
+            int randomIndex = random.nextInt(shipTypes.length);
+            Ship.ShipType selectedShipType = shipTypes[randomIndex];
+            int shipCost = selectedShipType.getShipPower() / 10;
+
+            if (pointsAfterBuy >= shipCost) {
+                shipList.add(selectedShipType);
+                pointsAfterBuy -= shipCost;
+                if (pointsAfterBuy < 10 || pointsAfterBuy <= pointsBeforeBuy / (randomIndex + 1) || shipList.size() >= 6 - randomIndex)
+                    break;
+            }
+        }
+        return shipList;
+    }
+
     public static class Factory extends BotFactory {
 
         @Override

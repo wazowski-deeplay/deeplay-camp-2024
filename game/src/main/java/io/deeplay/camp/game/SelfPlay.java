@@ -43,7 +43,7 @@ public class SelfPlay implements GalaxyListener {
 
     public void playGames(int numGames) {
         final ExecutorService executor = Executors.newCachedThreadPool();
-        for (int i = 1; i < numGames + 1; i++) {
+        for (int i = 1; i <= numGames; i++) {
             playGame(executor);
             if (i % 10 == 0) {
                 dumpStatisticsToFile();
@@ -112,17 +112,14 @@ public class SelfPlay implements GalaxyListener {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
-
-            if (answer.getMove().moveType() == Move.MoveType.SKIP) {
-                skipCounter++;
-            }
-
             if (answer.getShipList() != null) {
                 createShips(answer.getShipList(), game.getNextPlayerToAct());
+            } else {
+                if (answer.getMove().moveType() == Move.MoveType.SKIP) {
+                    skipCounter++;
+                }
+                getPlayerAction(answer.getMove(), nextPlayerToAct);
             }
-
-            getPlayerAction(answer.getMove(), nextPlayerToAct);
             moveCounter++;
             if (moveCounter % 6 == 0) addCredits();
         }

@@ -27,7 +27,7 @@ public class Player {
     public Player(final long id, final String name) {
         this.id = id;
         this.name = name;
-        this.totalGamePoints = 50; // пока мы не сделали экономику нашей игры, пусть будет, 50 очков для ходов
+        this.totalGamePoints = 60; // пока мы не сделали экономику нашей игры, пусть будет, 50 очков для ходов
         this.fleetList = new ArrayList<>();
         this.controlledPlanet = new ArrayList<>();
         this.legalMoves = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Player {
      */
     public int getCurrentGamePoints() {
         return controlledPlanet.stream()
-                .mapToInt(planet -> (int) Math.ceil(planet.getPoints() / 100.0))
+                .mapToInt(planet -> (int) Math.ceil(planet.getPoints() / 100.0) + 5)
                 .sum();
     }
 

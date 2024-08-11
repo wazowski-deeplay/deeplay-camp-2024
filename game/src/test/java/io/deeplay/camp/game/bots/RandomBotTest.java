@@ -46,9 +46,13 @@ public class RandomBotTest {
         moves.add(move3);
 
         Answer result = randomBot.getAnswer(randomBot.game.getField());
-        randomBot.getPlayerAction(result.getMove(), "Player1");
+        if (result.getShipList() == null) {
+            randomBot.getPlayerAction(result.getMove(), "Player1");
 
-        assertTrue(randomBot.game.getAllGameMoves().contains(result.getMove()));
-        //todo нормальные тесты на бота после рефакторинга
+            assertTrue(randomBot.game.getAllGameMoves().contains(result.getMove()));
+        } else {
+            randomBot.createShips(result.getShipList(), "Player1");
+
+        }//todo нормальные тесты на бота после рефакторинга
     }
 }

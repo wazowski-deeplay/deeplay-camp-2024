@@ -1,11 +1,8 @@
 package io.deeplay.camp.game.utils;
 
 import io.deeplay.camp.game.domain.GameTypes;
-import io.deeplay.camp.game.entites.Cell;
-import io.deeplay.camp.game.entites.Field;
-import io.deeplay.camp.game.entites.Move;
-import io.deeplay.camp.game.entites.Ship;
-import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
+
+import io.deeplay.camp.game.entites.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ public class GameLoggerTest {
         GameTypes gameType = GameTypes.HumanVsBot;
         String PlayerName = "Test";
         String PlayerName2 = "Test2";
+        Player player = new Player(0, PlayerName);
 
         Cell endPositionSM = new Cell(1, 1);
         Cell startPositionSM = new Cell(0, 4);
@@ -33,6 +31,8 @@ public class GameLoggerTest {
         gameLogger.connectingPlayer(PlayerName2);
         gameLogger.gameStarted(field);
         gameLogger.createShips(ships, PlayerName);
+        gameLogger.createShips(ships, PlayerName2);
+        player.decreaseTotalGamePoints(ships.get(0).getShipPower() / 10);
         gameLogger.getPlayerAction(move, PlayerName);
         gameLogger.gameEnded(PlayerName);
         gameLogger.endGameSession();

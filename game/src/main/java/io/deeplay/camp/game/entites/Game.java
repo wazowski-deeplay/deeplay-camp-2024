@@ -148,16 +148,27 @@ public class Game implements GalaxyListener {
 
     @Override
     public void addCredits() {
-        players[nextPlayerToAct].addTotalGamePoints();
+        players[0].addTotalGamePoints();
+        players[1].addTotalGamePoints();
     }
 
     @Override
     public void createShips(List<Ship.ShipType> ships, String playerName) {
-        Fleet fleet = new Fleet(playerStartPosition.get(playerName), playerNames.get(playerName));
-        for (Ship.ShipType shipType : ships) {
-            Ship ship = new Ship(shipType, fleet);
+        Fleet fleet;
+        int totalPower = 0;
+        if (playerStartPosition.get(playerName).getFleet() != null) {
+            fleet = playerStartPosition.get(playerName).getFleet();
+        } else {
+            fleet = new Fleet(playerStartPosition.get(playerName), playerNames.get(playerName));
         }
+        for (Ship.ShipType shipType : ships) {
+            new Ship(shipType, fleet);
+            totalPower += shipType.getShipPower();
+        }
+        players[nextPlayerToAct].decreaseTotalGamePoints(totalPower / 10);
+        switchPlayerToAct();
     }
+
 
     @Override
     public void gameEnded(String winner) {

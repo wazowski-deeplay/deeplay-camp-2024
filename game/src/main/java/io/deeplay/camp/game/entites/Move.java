@@ -57,15 +57,18 @@ public record Move(Cell startPosition, Cell endPosition, MoveType moveType, int 
             if (ValidationMove.isCapturePlanet(endPosition.getFleet().getFleetPower(), endPosition.planet.points)) {
                 capturePlanet(player, endPosition.planet);
             } else if (endPosition.planet.isCaptured() && !endPosition.planet.getOwner().equals(player)) {
+                player.removeFleet(endPosition.getFleet());
                 clearFleetFromPosition(endPosition);
             }
         }
     }
 
     public void capturePlanet(final Player player, final Planet planet) {
+        if (planet.isCaptured()) {
+            planet.getOwner().controlledPlanet.remove(planet);
+        }
         player.controlledPlanet.add(planet);
         planet.setOwner(player);
-        planet.isCaptured();
     }
 
     private void moveFleetToPosition(final Fleet fleet, final Cell targetPosition) {

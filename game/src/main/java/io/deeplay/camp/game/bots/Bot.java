@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.bots;
 
 import java.util.List;
+import java.util.Random;
 
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
@@ -22,19 +23,34 @@ public abstract class Bot implements PlayerInterface {
      * aka контроллер
      */
     protected final Game game;
+    private Random random;
+
 
     protected Bot(final String name, final Field field) {
         this.game = new Game(new Field(field));
         this.name = name;
+        this.random = new Random();
+
     }
 
     @Override
     public Answer getAnswer(final Field field) {
-        return new Answer(getMove());
+        Player player = game.getPlayerByName(name);
+        int randomValue = random.nextInt(10);
+        boolean hasNoFleet = player.getFleetList().isEmpty();
+        boolean hasEnoughPoints = player.getTotalGamePoints() >= 10;
+        boolean shouldBuyFleet = hasNoFleet && hasEnoughPoints || hasEnoughPoints && randomValue < 2;
+
+        if (shouldBuyFleet) {
+            return new Answer(buyFleets());
+        } else {
+            return new Answer(getMove());
+        }
     }
 
     protected abstract Move getMove();
 
+    protected abstract List<Ship.ShipType> buyFleets();
 
 
     @Override
