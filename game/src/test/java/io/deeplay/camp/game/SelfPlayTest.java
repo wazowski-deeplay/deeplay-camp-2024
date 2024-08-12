@@ -18,9 +18,6 @@ public class SelfPlayTest {
                 new RandomBot.Factory()
         };
         selfPlay = new SelfPlay(4, names, factories);
-//        for (int i = 0; i < 2; i++) {
-//            selfPlay.playGame();
-//        }
         selfPlay.playGames(10);
         //todo нормальные тесты на селфплей после рефакторинга
 //        assertThrows(RuntimeException.class, () -> selfPlay.playGame());

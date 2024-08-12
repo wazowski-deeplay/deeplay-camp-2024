@@ -6,6 +6,7 @@ import java.util.Random;
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
+import io.deeplay.camp.game.utils.FleetDecisionHelper;
 import io.deeplay.camp.game.utils.ValidationMove;
 
 /**
@@ -36,12 +37,9 @@ public abstract class Bot implements PlayerInterface {
     @Override
     public Answer getAnswer(final Field field) {
         Player player = game.getPlayerByName(name);
-        int randomValue = random.nextInt(10);
-        boolean hasNoFleet = player.getFleetList().isEmpty();
-        boolean hasEnoughPoints = player.getTotalGamePoints() >= 10;
-        boolean shouldBuyFleet = hasNoFleet && hasEnoughPoints || hasEnoughPoints && randomValue < 2;
+        Cell startCell = game.getPlayerStartPosition().get(name);
 
-        if (shouldBuyFleet) {
+        if (FleetDecisionHelper.shouldBuyFleet(startCell, player)) {
             return new Answer(buyFleets());
         } else {
             return new Answer(getMove());

@@ -63,7 +63,7 @@ class BotTest {
 
         @Override
         protected List buyFleets() {
-            return  List.of(Ship.ShipType.BASIC);
+            return List.of(Ship.ShipType.BASIC);
         }
     }
 
@@ -111,9 +111,9 @@ class BotTest {
 
         if (answer.getShipList() != null) {
             game.createShips(answer.getShipList(), game.getNextPlayerToAct());
+        } else {
+            assertDoesNotThrow(() -> bot.getPlayerAction(answer.getMove(), player.getName()));
         }
-
-        assertDoesNotThrow(() -> bot.getPlayerAction(answer.getMove(), player.getName()));
     }
 
     @Test

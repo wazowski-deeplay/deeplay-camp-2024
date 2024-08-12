@@ -4,10 +4,7 @@ import io.deeplay.camp.game.domain.GalaxyListener;
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.utils.ValidationMove;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Контроллер
