@@ -20,6 +20,8 @@ public class Game implements GalaxyListener {
     private final Map<String, Cell> playerStartPosition;
     private int nextPlayerToAct;
     private String id;
+    private boolean skipException = false;
+    private int[] consecutiveSkipCounts = new int[NUM_PLAYERS];
 
     public Game(final Field field) {
         this.field = field;
@@ -67,11 +69,15 @@ public class Game implements GalaxyListener {
 
 
     public boolean isGameOver() {
-        return field.isGameOver();
+        if (!skipException) {
+            return field.isGameOver();
+        } else return true;
     }
 
     public String isWinner() {
+        if (!skipException)
         return field.isWinner();
+        else return "Ничья";
     }
 
 
@@ -132,10 +138,24 @@ public class Game implements GalaxyListener {
 
         if (move.moveType() == Move.MoveType.ORDINARY) {
             if (ValidationMove.isValidOrdinaryMove(move, field, players[nextPlayerToAct])) {
+                consecutiveSkipCounts[nextPlayerToAct] = 0; // Если игрок сделал обычный ход, сбрасываем счётчик
                 allGameMoves.add(move);
                 move.makeMove(players[nextPlayerToAct]);
             } else throw new IllegalStateException("Такой ORDINARY move не валиден!");
         } else if (move.moveType() == Move.MoveType.SKIP) {
+            consecutiveSkipCounts[nextPlayerToAct]++;
+            //todo Как это лучше обработать
+            // Проверяем условия ничьей
+            if (consecutiveSkipCounts[nextPlayerToAct] >= 3) {
+                // Проверяем, сделал ли другой игрок также 3 последовательных хода SKIP
+                if (consecutiveSkipCounts[(nextPlayerToAct + 1) % NUM_PLAYERS] >= 3) {
+                    skipException = true;
+                    gameEnded("no winner"); // Ничья
+                    endGameSession();
+                    return;
+                }
+                //else consecutiveSkipCounts[(nextPlayerToAct + 1) % NUM_PLAYERS] = 0;
+            }
             getAllGameMoves().add(move);
         } else throw new IllegalStateException("Не существует такого типа хода!");
 
@@ -169,7 +189,6 @@ public class Game implements GalaxyListener {
 
     @Override
     public void gameEnded(String winner) {
-
     }
 
     @Override

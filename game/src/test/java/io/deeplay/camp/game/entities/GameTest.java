@@ -147,4 +147,127 @@ class GameTest {
             assertNotSame(originalStartCell, copiedStartCell);
         }
     }
+    @Test
+    public void testDrawOnConsecutiveSkips0() {
+        Field field = new Field(10);
+        Game game = new Game(field);
+
+        game.startGameSession("test-game", GameTypes.BotVsBot);
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        // Первый игрок пропускает три раза подряд
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        // Игра должна закончиться ничьей
+        assertTrue(game.isGameOver());
+        assertEquals("Ничья",game.isWinner());
+    }
+    @Test
+    public void testDrawOnConsecutiveSkips1() {
+        Field field = new Field(10);
+        Game game = new Game(field);
+
+        game.startGameSession("test-game", GameTypes.BotVsBot);
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
+
+        // Первый игрок пропускает три раза подряд
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        // Игра должна закончиться ничьей
+        assertFalse(game.isGameOver());
+    }
+    @Test
+    public void testDrawOnConsecutiveSkips2() {
+        Field field = new Field(10);
+        Game game = new Game(field);
+
+        game.startGameSession("test-game", GameTypes.BotVsBot);
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[2][2], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[2][2], field.getBoard()[3][3], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        assertFalse(game.isGameOver());
+    }
+    @Test
+    public void testDrawOnConsecutiveSkips3() {
+        Field field = new Field(10);
+        Game game = new Game(field);
+
+        game.startGameSession("test-game", GameTypes.BotVsBot);
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
+        new Fleet(field.getBoard()[9][0], game.getPlayerByName("Player1"));
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(field.getBoard()[9][0], field.getBoard()[9][1], Move.MoveType.ORDINARY, 5), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[3][3], Move.MoveType.ORDINARY, 14), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+
+        assertFalse(game.isGameOver());
+    }
 }
