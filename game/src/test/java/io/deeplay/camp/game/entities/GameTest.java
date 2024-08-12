@@ -4,6 +4,7 @@ import io.deeplay.camp.game.domain.GalaxyListener;
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.Move;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class GameTest {
 
     @Test
     void startGameSessionTest() {
-        Field field0 = new Field(10);
+        Field field0 = new Field(10, new SymmetricalGenerator());
         player1 = new Player(0, "Player 1");
         player2 = new Player(1, "Player 2");
         players = new ArrayList<>();
@@ -44,7 +45,7 @@ class GameTest {
     @BeforeEach
     public void setUp() {
         // Создаем поле и начальные данные для теста
-        field = new Field(10); // Предполагается, что конструктор принимает размер поля
+        field = new Field(10, new SymmetricalGenerator()); // Предполагается, что конструктор принимает размер поля
 
         // Создаем и настраиваем оригинальную игру
         originalGame = new Game(field);

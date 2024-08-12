@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.bots;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ public class RandomBotTest {
 
     @BeforeEach
     public void setUp() {
-        field = new Field(2); // Создаем поле размером 2x2
+        field = new Field(2, new SymmetricalGenerator()); // Создаем поле размером 2x2
 
         randomBot = new RandomBot.Factory().createBot("Player1", field);
         randomBot.connectingPlayer("Player1");

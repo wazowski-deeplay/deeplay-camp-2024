@@ -2,6 +2,7 @@ package io.deeplay.camp.game.bots;
 
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import io.deeplay.camp.game.utils.PointsCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class BotTest {
 
     @BeforeEach
     void setUp() {
-        field = new Field(10);
+        field = new Field(10, new SymmetricalGenerator());
         bot = new TestBot.Factory().createBot("player1", field);
         player = new Player(0, "player1");
         game = bot.game;

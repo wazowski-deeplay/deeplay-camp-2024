@@ -10,6 +10,8 @@ import io.deeplay.camp.game.bots.Bot;
 import io.deeplay.camp.game.domain.GalaxyListener;
 import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.KMeansGenerator;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
 import io.deeplay.camp.game.utils.GameLogger;
 
@@ -53,7 +55,7 @@ public class SelfPlay implements GalaxyListener {
     public void playGame(ExecutorService executor) {
         listeners = new ArrayList<>();
         playerNamesMap = new HashMap<>();
-        final Field field = new Field(sizeField);
+        final Field field = new Field(sizeField, new KMeansGenerator());
         final Game game = new Game(field);
         final GameLogger logger = new GameLogger(field);
         long skipCounter = 0;
@@ -62,6 +64,11 @@ public class SelfPlay implements GalaxyListener {
 
         List<Ship.ShipType> startShips = new ArrayList<>();
         startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
+
 
         players[0] = factories[0].createBot(playerNames[0], field);
         players[1] = factories[1].createBot(playerNames[1], field);

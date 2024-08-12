@@ -98,9 +98,12 @@ public class Game implements GalaxyListener {
     @Override
     public void gameStarted(Field field) {
         //this.field.setBoard(field.getBoard());
-
         playerStartPosition.put(players[0].getName(), this.field.getBoard()[0][this.field.getSize() - 1]);
         playerStartPosition.put(players[1].getName(), this.field.getBoard()[this.field.getSize() - 1][0]);
+
+        playerStartPosition.get(players[0].getName()).planet.setOwner(players[0]);
+        playerStartPosition.get(players[1].getName()).planet.setOwner(players[1]);
+
     }
 
 

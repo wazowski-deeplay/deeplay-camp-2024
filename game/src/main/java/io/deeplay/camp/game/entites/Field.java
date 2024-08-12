@@ -1,5 +1,7 @@
 package io.deeplay.camp.game.entites;
 
+import io.deeplay.camp.game.entites.boardGenerator.BoardGenerator;
+
 import java.util.*;
 
 /**
@@ -12,18 +14,17 @@ public class Field {
 
     private final List<Planet> planets;
 
-    public void updateField() {
-    }
 
-    public Field(final int size) {
+    public Field(final int size, BoardGenerator boardGenerator) {
         this.size = size;
         this.planets = new ArrayList<>();
-        generateField(size);
+        board = boardGenerator.generateBoard(size);
+        collectPlanet();
     }
 
     /**
      * Конструктор копирования для игрового поля.
-     *
+     * <p>
      * Создает новое игровое поле, являющееся глубокой копией переданного поля.
      * Копируются все клетки и планеты, создавая новые объекты, чтобы изменения
      * в новом поле не влияли на исходное.
@@ -76,33 +77,11 @@ public class Field {
         return planets;
     }
 
-    /**
-     * Простая генерация зеркальной карты
-     *
-     * @param size размер поля
-     */
-    private void generateField(final int size) {
-        Random random = new Random();
-        board = new Cell[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j <= i; j++) {
-                if (random.nextInt(2) == 1) {
-                    int temp = 100 + random.nextInt(13) * 50;
-                    Planet newPlanet = new Planet(temp);
-                    board[i][j] = new Cell(i, j, newPlanet);
-                    newPlanet.setCell(board[i][j]);
-                    planets.add(newPlanet);
-                    if (i != j) {
-                        Planet newPlanet2 = new Planet(temp);
-                        board[j][i] = new Cell(j, i, newPlanet2);
-                        newPlanet2.setCell(board[j][i]);
-                        planets.add(newPlanet2);
-                    }
-                } else {
-                    board[i][j] = new Cell(i, j);
-                    if (i != j) {
-                        board[j][i] = new Cell(j, i);
-                    }
+    private void collectPlanet() {
+        for (Cell[] cells : board) {
+            for (Cell cell : cells) {
+                if (cell.planet != null) {
+                    planets.add(cell.planet);
                 }
             }
         }

@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.entities;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +73,7 @@ class MoveTest {
 
     @Test
     void testMoveToEmptyCell() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
         Player player = new Player(0, "0");
         Fleet fleet = new Fleet(field.getBoard()[0][0], player);
@@ -86,7 +87,7 @@ class MoveTest {
 
     @Test
     void testMoveToStrongEnemyFleet() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
         Player player1 = new Player(0, "0");
         Player player2 = new Player(1, "1");
@@ -103,7 +104,7 @@ class MoveTest {
 
     @Test
     void testMoveToWeakEnemyFleet() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
         Player player1 = new Player(0, "0");
         Player player2 = new Player(1, "1");
@@ -119,7 +120,7 @@ class MoveTest {
 
     @Test
     void testMoveToJoinFleet() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
         Player player = new Player(0, "0");
         Fleet fleet1 = new Fleet(field.getBoard()[0][0], player);

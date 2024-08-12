@@ -3,6 +3,7 @@ package io.deeplay.camp.game.entities;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.deeplay.camp.game.entites.Field;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ class FieldTest {
 
     @BeforeEach
     void setUp() {
-        field = new Field(5);
+        field = new Field(5, new SymmetricalGenerator());
         player1 = new Player(0, "player1");
         player2 = new Player(1, "player2");
         for (Planet planet : field.getPlanets()) {
@@ -29,7 +30,7 @@ class FieldTest {
     @Test
     public void testFieldCopyConstructor() {
         // Создание оригинального поля
-        Field originalField = new Field(5);
+        Field originalField = new Field(5, new SymmetricalGenerator());
 
         // Копирование поля
         Field copiedField = new Field(originalField);
@@ -106,7 +107,7 @@ class FieldTest {
 
     @Test
     void testChangesField() {
-        Field originalField = new Field(4);
+        Field originalField = new Field(4, new SymmetricalGenerator());
         Field copiedField = new Field(originalField);
 
 

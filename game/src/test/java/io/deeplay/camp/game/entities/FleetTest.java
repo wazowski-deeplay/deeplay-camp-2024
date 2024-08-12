@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.entities;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -189,7 +190,7 @@ class FleetTest {
 
     @Test
     void testAddFleetMovesValidMoves() {
-        Field field = new Field(5);
+        Field field = new Field(5, new SymmetricalGenerator());
         Fleet currentFleet = new Fleet(field.getBoard()[2][2], player);
         currentFleet.addFleetMoves(field);
         Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7);
@@ -199,9 +200,10 @@ class FleetTest {
         assertTrue(currentFleet.getFleetMoves().contains(move2));
         assertTrue(currentFleet.getFleetMoves().contains(move3));
     }
+
     @Test
     void testAddFleetMovesInvalidMoves() {
-        Field field = new Field(20);
+        Field field = new Field(20, new SymmetricalGenerator());
         Fleet currentFleet = new Fleet(field.getBoard()[2][2], player);
         currentFleet.addFleetMoves(field);
         Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[9][10], Move.MoveType.ORDINARY, 54); // уже не хватает очков для хода

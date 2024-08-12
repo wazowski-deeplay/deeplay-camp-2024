@@ -5,6 +5,7 @@ import io.deeplay.camp.game.entites.Cell;
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Move;
 import io.deeplay.camp.game.entites.Ship;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class GameLoggerTest {
 
     @Test
     void gameLoggerTest() {
-        Field field = new Field(5);
+        Field field = new Field(5, new SymmetricalGenerator());
         GameLogger gameLogger = new GameLogger(field);
         String gameId = "TestID";
         GameTypes gameType = GameTypes.HumanVsBot;

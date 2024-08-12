@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.utils;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ class ValidationMoveTest {
 
     @BeforeEach
     void setUp() {
-        field = new Field(10);
+        field = new Field(10, new SymmetricalGenerator());
         player = new Player(0, "0");
     }
 

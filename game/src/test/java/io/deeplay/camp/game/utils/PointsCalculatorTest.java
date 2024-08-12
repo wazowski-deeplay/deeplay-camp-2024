@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.utils;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ class PointsCalculatorTest {
 
     @BeforeEach
     void setUp() {
-        field = new Field(5);
+        field = new Field(5, new SymmetricalGenerator());
         Player player1 = new Player(0, "player1");
         fleet = new Fleet(field.getBoard()[0][0], player1);
 

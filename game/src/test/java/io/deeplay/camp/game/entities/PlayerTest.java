@@ -1,8 +1,10 @@
 package io.deeplay.camp.game.entities;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -77,7 +79,7 @@ class PlayerTest {
 //    }
     @Test
     void testAddLegalMoves() {
-        Field field = new Field(5);
+        Field field = new Field(5, new SymmetricalGenerator());
         Fleet fleet1 = new Fleet(field.getBoard()[0][2], player);
         Fleet fleet2 = new Fleet(field.getBoard()[3][2], player);
         fleet1.addFleetMoves(field);
