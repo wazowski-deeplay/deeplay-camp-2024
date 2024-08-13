@@ -1,5 +1,4 @@
-package io.deeplay.camp.game.domain;
-
+package io.deeplay.camp.game.interfaces;
 
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Move;
@@ -14,10 +13,9 @@ public interface GalaxyListener {
     /**
      * Инициализация игровой сессии
      *
-     * @param gameId   создаем идентификатор сессии
-     * @param gameType выбираем тип игры
+     * @param gameId создаем идентификатор сессии
      */
-    void startGameSession(final String gameId, final GameTypes gameType);
+    void startGameSession(final String gameId);
 
     /**
      * Подключаем игроков

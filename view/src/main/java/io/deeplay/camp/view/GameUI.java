@@ -1,5 +1,6 @@
 package io.deeplay.camp.view;
-import io.deeplay.camp.game.domain.GalaxyListener;
+
+import io.deeplay.camp.game.interfaces.GalaxyListener;
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Move;
 
@@ -10,18 +11,22 @@ public interface GameUI extends GalaxyListener {
      * Создание игровой сессии
      */
     void createGameSession(String username);
+
     /**
-     *  Регистрация пользователя
+     * Регистрация пользователя
      */
     void registrationUser();
+
     /**
      * Метод для выбора цвета кораблей
      */
     void selectShipColor();
+
     /**
      * Метод для отрисовки игрового поля
      */
     void renderGameField(Field field);
+
     /**
      * Метод, который будет предлагать варианты хода
      */

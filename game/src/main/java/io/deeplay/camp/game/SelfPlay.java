@@ -7,11 +7,9 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import io.deeplay.camp.game.bots.Bot;
-import io.deeplay.camp.game.domain.GalaxyListener;
-import io.deeplay.camp.game.domain.GameTypes;
+import io.deeplay.camp.game.interfaces.GalaxyListener;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.boardGenerator.KMeansGenerator;
-import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
 import io.deeplay.camp.game.utils.GameLogger;
 
@@ -19,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
 
 public class SelfPlay implements GalaxyListener {
 
@@ -30,7 +27,7 @@ public class SelfPlay implements GalaxyListener {
     private Map<String, PlayerInterface> playerNamesMap;
     private List<GalaxyListener> listeners;
     private int totalGames;
-    private Map<String, Integer> wins = new HashMap<>();
+    private Map<String, Integer> wins;
     private String winner = null;
 
     public SelfPlay(final int sizeField, final String[] playerNames, final Bot.BotFactory[] factories) {
@@ -39,6 +36,7 @@ public class SelfPlay implements GalaxyListener {
         this.playerNames = playerNames;
         listeners = new ArrayList<>();
         playerNamesMap = new HashMap<>();
+        wins = new HashMap<>();
     }
 
     public void playGames(int numGames) {
@@ -64,10 +62,10 @@ public class SelfPlay implements GalaxyListener {
 
         List<Ship.ShipType> startShips = new ArrayList<>();
         startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
+//        startShips.add(Ship.ShipType.BASIC);
+//        startShips.add(Ship.ShipType.BASIC);
+//        startShips.add(Ship.ShipType.BASIC);
+//        startShips.add(Ship.ShipType.BASIC);
 
 
         players[0] = factories[0].createBot(playerNames[0], field);
@@ -80,7 +78,7 @@ public class SelfPlay implements GalaxyListener {
         listeners.add(players[0]);
         listeners.add(players[1]);
 
-        startGameSession("0000", GameTypes.BotVsBot);
+        startGameSession("0000");
         connectingPlayer(playerNames[0]);
         connectingPlayer(playerNames[1]);
         gameStarted(field);
@@ -165,9 +163,9 @@ public class SelfPlay implements GalaxyListener {
     }
 
     @Override
-    public void startGameSession(final String gameId, final GameTypes gameType) {
+    public void startGameSession(final String gameId) {
         for (final GalaxyListener listener : listeners) {
-            listener.startGameSession(gameId, gameType);
+            listener.startGameSession(gameId);
         }
     }
 

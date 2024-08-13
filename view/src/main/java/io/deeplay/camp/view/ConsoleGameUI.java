@@ -1,6 +1,5 @@
 package io.deeplay.camp.view;
 
-import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Move;
 import io.deeplay.camp.game.entites.Ship;
@@ -73,9 +72,8 @@ public class ConsoleGameUI implements GameUI {
     }
 
     @Override
-    public void startGameSession(String gameId, GameTypes gameType) {
+    public void startGameSession(String gameId) {
         System.out.println("Создана игровая комната №" + gameId);
-        System.out.println("На галактической арене " + gameType);
         System.out.println("Выбери размер игрового поля в диапазоне от " + MIN_FIELD + " до " + MAX_FIELD);
         System.out.println("Введите число и нажмите Enter");
     }

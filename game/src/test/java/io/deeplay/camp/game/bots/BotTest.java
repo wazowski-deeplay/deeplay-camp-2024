@@ -1,6 +1,5 @@
 package io.deeplay.camp.game.bots;
 
-import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import io.deeplay.camp.game.utils.PointsCalculator;
@@ -62,7 +61,7 @@ class BotTest {
         }
 
         @Override
-        protected List buyFleets() {
+        protected List<Ship.ShipType> buyFleets() {
             return List.of(Ship.ShipType.BASIC);
         }
     }
@@ -82,7 +81,7 @@ class BotTest {
 
     @Test
     void testStartGameSession() {
-        assertDoesNotThrow(() -> bot.startGameSession("testGameId", GameTypes.HumanVsBot));
+        assertDoesNotThrow(() -> bot.startGameSession("testGameId"));
         assertDoesNotThrow(() -> bot.connectingPlayer("player1"));
         assertDoesNotThrow(() -> bot.connectingPlayer("player0"));
         assertDoesNotThrow(() -> bot.gameStarted(field));

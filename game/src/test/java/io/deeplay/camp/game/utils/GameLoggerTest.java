@@ -1,7 +1,5 @@
 package io.deeplay.camp.game.utils;
 
-import io.deeplay.camp.game.domain.GameTypes;
-
 import io.deeplay.camp.game.entites.*;
 
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
@@ -17,7 +15,6 @@ public class GameLoggerTest {
         Field field = new Field(5, new SymmetricalGenerator());
         GameLogger gameLogger = new GameLogger(field);
         String gameId = "TestID";
-        GameTypes gameType = GameTypes.HumanVsBot;
         String PlayerName = "Test";
         String PlayerName2 = "Test2";
         Player player = new Player(0, PlayerName);
@@ -28,7 +25,7 @@ public class GameLoggerTest {
         Move move = new Move(startPositionSM, endPositionSM, Move.MoveType.ORDINARY, 5);
         List<Ship.ShipType> ships = new ArrayList<>();
         ships.add(Ship.ShipType.BASIC);
-        gameLogger.startGameSession(gameId, gameType);
+        gameLogger.startGameSession(gameId);
         gameLogger.connectingPlayer(PlayerName);
         gameLogger.connectingPlayer(PlayerName2);
         gameLogger.gameStarted(field);

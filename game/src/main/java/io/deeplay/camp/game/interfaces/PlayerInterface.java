@@ -1,6 +1,5 @@
 package io.deeplay.camp.game.interfaces;
 
-import io.deeplay.camp.game.domain.GalaxyListener;
 import io.deeplay.camp.game.entites.Answer;
 import io.deeplay.camp.game.entites.Field;
 

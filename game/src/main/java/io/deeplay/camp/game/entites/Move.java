@@ -95,18 +95,6 @@ public record Move(Cell startPosition, Cell endPosition, MoveType moveType, int 
         SKIP
     }
 
-    /**
-     * Статус-флажок для контроля выполнения игроком хода:
-     * DONE - выполнен
-     * ILLEGAL_MOVE - ход не валидный, не выполнен
-     * LEAVES_PLAYER_IN_CHECK - состояние проверки хода игрока
-     */
-    public enum MoveStatus {
-        DONE,
-        ILLEGAL_MOVE,
-        LEAVES_PLAYER_IN_CHECK
-    }
-
     @Override
     public String toString() {
         if (startPosition != null && endPosition != null) {

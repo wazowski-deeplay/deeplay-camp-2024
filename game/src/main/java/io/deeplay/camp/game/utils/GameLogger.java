@@ -1,8 +1,7 @@
 package io.deeplay.camp.game.utils;
 
 
-import io.deeplay.camp.game.domain.GalaxyListener;
-import io.deeplay.camp.game.domain.GameTypes;
+import io.deeplay.camp.game.interfaces.GalaxyListener;
 import io.deeplay.camp.game.entites.*;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +24,9 @@ public class GameLogger implements GalaxyListener {
     }
 
     @Override
-    public void startGameSession(String gameId, GameTypes gameType) {
-        game.startGameSession(gameId, gameType);
+    public void startGameSession(String gameId) {
+        game.startGameSession(gameId);
         logger.info("Начало игровой сессии {}", gameId);
-        logger.info("Игра в формате {}", gameType.toString());
     }
 
     @Override

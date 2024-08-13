@@ -1,7 +1,6 @@
 package io.deeplay.camp.game.entites;
 
-import io.deeplay.camp.game.domain.GalaxyListener;
-import io.deeplay.camp.game.domain.GameTypes;
+import io.deeplay.camp.game.interfaces.GalaxyListener;
 import io.deeplay.camp.game.utils.ValidationMove;
 
 import java.util.*;
@@ -13,8 +12,6 @@ public class Game implements GalaxyListener {
     private final static int NUM_PLAYERS = 2;
 
     private final Field field;
-    private GameTypes gameType;
-    private List<Move> allGameMoves;
     public final Player[] players = new Player[NUM_PLAYERS];
     private final Map<String, Player> playerNames;
     private final Map<String, Cell> playerStartPosition;
@@ -25,7 +22,6 @@ public class Game implements GalaxyListener {
 
     public Game(final Field field) {
         this.field = field;
-        this.allGameMoves = new ArrayList<>();
         this.playerNames = new HashMap<>();
         this.playerStartPosition = new HashMap<>();
     }
@@ -35,12 +31,7 @@ public class Game implements GalaxyListener {
         // Глубокое копирование поля
         this.field = new Field(other.field);
 
-        // GameTypes — это enum
-        this.gameType = other.gameType;
         this.id = other.id;
-
-        // Копируем заранее определенные ходы (если они допустимы в новой сессии)
-        this.allGameMoves = new ArrayList<>(other.allGameMoves.size());
 
         // Копируем информацию об именах игроков и начальных позициях
         this.playerNames = new HashMap<>(other.playerNames.size());
@@ -49,11 +40,6 @@ public class Game implements GalaxyListener {
         // Устанавливаем, какой игрок ходит следующим (начальное состояние)
         this.nextPlayerToAct = other.nextPlayerToAct;
     }
-
-    public GameTypes getGameType() {
-        return gameType;
-    }
-
 
     public String getId() {
         return id;
@@ -84,8 +70,7 @@ public class Game implements GalaxyListener {
 
 
     @Override
-    public void startGameSession(String gameId, GameTypes gameType) {
-        this.gameType = gameType;
+    public void startGameSession(String gameId) {
         id = gameId;
     }
 
@@ -141,12 +126,10 @@ public class Game implements GalaxyListener {
         if (move.moveType() == Move.MoveType.ORDINARY) {
             if (ValidationMove.isValidOrdinaryMove(move, field, players[nextPlayerToAct])) {
                 consecutiveSkipCounts[nextPlayerToAct] = 0; // Если игрок сделал обычный ход, сбрасываем счётчик
-                allGameMoves.add(move);
                 move.makeMove(players[nextPlayerToAct]);
             } else throw new IllegalStateException("Такой ORDINARY move не валиден!");
         } else if (move.moveType() == Move.MoveType.SKIP) {
             consecutiveSkipCounts[nextPlayerToAct]++;
-
             if (consecutiveSkipCounts[nextPlayerToAct] >= 3) {
                 // Проверяем, сделал ли другой игрок также 3 последовательных хода SKIP
                 if (consecutiveSkipCounts[(nextPlayerToAct + 1) % NUM_PLAYERS] >= 3) {
@@ -155,7 +138,6 @@ public class Game implements GalaxyListener {
                 }
 
             }
-            getAllGameMoves().add(move);
         } else throw new IllegalStateException("Не существует такого типа хода!");
 
         players[nextPlayerToAct].decreaseTotalGamePoints(move.cost());
@@ -197,10 +179,6 @@ public class Game implements GalaxyListener {
 
     public Field getField() {
         return field;
-    }
-
-    public List<Move> getAllGameMoves() {
-        return allGameMoves;
     }
 
     public Player getPlayerByName(final String name) {

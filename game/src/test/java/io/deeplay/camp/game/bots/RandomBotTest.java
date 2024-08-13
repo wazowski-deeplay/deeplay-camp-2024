@@ -10,7 +10,6 @@ import java.util.List;
 
 import static io.deeplay.camp.game.utils.PointsCalculator.DIAGONAL_COST;
 import static io.deeplay.camp.game.utils.PointsCalculator.DIRECT_COST;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RandomBotTest {
     private Field field;
@@ -24,7 +23,7 @@ public class RandomBotTest {
         randomBot.connectingPlayer("Player1");
         randomBot.connectingPlayer("Player2");
 
-        randomBot.startGameSession(randomBot.game.getId(), randomBot.game.getGameType());
+        randomBot.startGameSession(randomBot.game.getId());
 
         // Устанавливаем начальные позиции
         randomBot.gameStarted(field);
@@ -48,8 +47,6 @@ public class RandomBotTest {
         Answer result = randomBot.getAnswer(randomBot.game.getField());
         if (result.getShipList() == null) {
             randomBot.getPlayerAction(result.getMove(), "Player1");
-
-            assertTrue(randomBot.game.getAllGameMoves().contains(result.getMove()));
         } else {
             randomBot.createShips(result.getShipList(), "Player1");
 

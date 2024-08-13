@@ -1,9 +1,7 @@
 package io.deeplay.camp.game.bots;
 
 import java.util.List;
-import java.util.Random;
 
-import io.deeplay.camp.game.domain.GameTypes;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
 import io.deeplay.camp.game.utils.FleetDecisionHelper;
@@ -24,14 +22,11 @@ public abstract class Bot implements PlayerInterface {
      * aka контроллер
      */
     protected final Game game;
-    private Random random;
 
 
     protected Bot(final String name, final Field field) {
         this.game = new Game(new Field(field));
         this.name = name;
-        this.random = new Random();
-
     }
 
     @Override
@@ -52,8 +47,8 @@ public abstract class Bot implements PlayerInterface {
 
 
     @Override
-    public void startGameSession(final String gameId, final GameTypes gameType) {
-        game.startGameSession(gameId, gameType);
+    public void startGameSession(final String gameId) {
+        game.startGameSession(gameId);
     }
 
     @Override
@@ -88,7 +83,7 @@ public abstract class Bot implements PlayerInterface {
      *     <li>Передает ход следующему игроку.</li>
      * </ul>
      *
-     * @param move_       Объект хода {@link Move}, содержащий информацию о типе хода и его параметрах.
+     * @param move_      Объект хода {@link Move}, содержащий информацию о типе хода и его параметрах.
      * @param playerName Имя игрока, выполняющего ход.
      * @throws IllegalArgumentException если игрок с данным именем не найден или тип хода не существует.
      * @throws IllegalStateException    если ход выполняется не в очереди игрока или если ход недопустим.
