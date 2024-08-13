@@ -53,6 +53,7 @@ public class SelfPlay implements GalaxyListener {
     }
 
     public void playGame(ExecutorService executor) {
+        winner = null;
         listeners = new ArrayList<>();
         playerNamesMap = new HashMap<>();
         final Field field = new Field(sizeField, new KMeansGenerator());
