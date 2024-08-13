@@ -3,6 +3,8 @@ package io.deeplay.camp.game.utils;
 import io.deeplay.camp.game.domain.GameTypes;
 
 import io.deeplay.camp.game.entites.*;
+
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

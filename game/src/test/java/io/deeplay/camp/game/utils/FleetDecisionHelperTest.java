@@ -1,9 +1,9 @@
 package io.deeplay.camp.game.utils;
 
-import io.deeplay.camp.game.entites.Cell;
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Fleet;
 import io.deeplay.camp.game.entites.Player;
+import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +21,7 @@ class FleetDecisionHelperTest {
     }
     @Test
     void testIsAvailablePosition() {
-        Field field = new Field(4);
+        Field field = new Field(4, new SymmetricalGenerator());
         Player player1 = new Player(0, "Player0");
         Player player2 = new Player(1, "Player1");
         new Fleet(field.getBoard()[0][3], player2);
