@@ -169,7 +169,7 @@ class GameTest {
 
         // Игра должна закончиться ничьей
         assertTrue(game.isGameOver());
-        assertEquals("Ничья",game.isWinner());
+        assertEquals("победитель не существует",game.isWinner());
     }
     @Test
     public void testDrawOnConsecutiveSkips1() {

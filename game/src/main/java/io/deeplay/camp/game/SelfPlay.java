@@ -58,7 +58,7 @@ public class SelfPlay implements GalaxyListener {
         final Field field = new Field(sizeField, new KMeansGenerator());
         final Game game = new Game(field);
         final GameLogger logger = new GameLogger(field);
-        long skipCounter = 0;
+        //long skipCounter = 0;
         long moveCounter = 0;
 
 
@@ -89,7 +89,7 @@ public class SelfPlay implements GalaxyListener {
         createShips(startShips, playerNames[1]);
 
 
-        while (!game.isGameOver() && skipCounter < 4) {
+        while (!game.isGameOver() /*&& skipCounter < 4*/) {
             final String nextPlayerToAct = game.getNextPlayerToAct();
 
             final PlayerInterface player = playerNamesMap.computeIfAbsent(nextPlayerToAct, (key) -> {

@@ -63,21 +63,23 @@ public class Game implements GalaxyListener {
         return players[nextPlayerToAct].getName();
     }
 
-    public int getNextPlayerToActIndex() {
-        return nextPlayerToAct;
-    }
-
 
     public boolean isGameOver() {
-        if (!skipException) {
-            return field.isGameOver();
-        } else return true;
+        // Если игра завершена из-за 3 подряд пропусков у обоих игроков, завершаем игру
+        if (skipException) {
+            return true;
+        }
+        // Проверяем исходную логику завершения игры (например, контроль всех планет одним игроком)
+        return field.isGameOver();
     }
 
     public String isWinner() {
-        if (!skipException)
+        // Если игра завершена из-за 3 подряд пропусков у обоих игроков, возвращаем "ничья"
+        if (skipException) {
+            return "победитель не существует";
+        }
+        // В противном случае возвращаем победителя по исходной логике (контроль всех планет)
         return field.isWinner();
-        else return "Ничья";
     }
 
 
@@ -144,17 +146,14 @@ public class Game implements GalaxyListener {
             } else throw new IllegalStateException("Такой ORDINARY move не валиден!");
         } else if (move.moveType() == Move.MoveType.SKIP) {
             consecutiveSkipCounts[nextPlayerToAct]++;
-            //todo Как это лучше обработать
-            // Проверяем условия ничьей
+
             if (consecutiveSkipCounts[nextPlayerToAct] >= 3) {
                 // Проверяем, сделал ли другой игрок также 3 последовательных хода SKIP
                 if (consecutiveSkipCounts[(nextPlayerToAct + 1) % NUM_PLAYERS] >= 3) {
                     skipException = true;
-                    gameEnded("no winner"); // Ничья
-                    endGameSession();
                     return;
                 }
-                //else consecutiveSkipCounts[(nextPlayerToAct + 1) % NUM_PLAYERS] = 0;
+
             }
             getAllGameMoves().add(move);
         } else throw new IllegalStateException("Не существует такого типа хода!");
