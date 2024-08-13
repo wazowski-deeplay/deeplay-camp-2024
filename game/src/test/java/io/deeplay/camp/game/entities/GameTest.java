@@ -149,7 +149,7 @@ class GameTest {
     }
     @Test
     public void testDrawOnConsecutiveSkips0() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game", GameTypes.BotVsBot);
@@ -173,7 +173,7 @@ class GameTest {
     }
     @Test
     public void testDrawOnConsecutiveSkips1() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game", GameTypes.BotVsBot);
@@ -201,7 +201,7 @@ class GameTest {
     }
     @Test
     public void testDrawOnConsecutiveSkips2() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game", GameTypes.BotVsBot);
@@ -236,7 +236,7 @@ class GameTest {
     }
     @Test
     public void testDrawOnConsecutiveSkips3() {
-        Field field = new Field(10);
+        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game", GameTypes.BotVsBot);
