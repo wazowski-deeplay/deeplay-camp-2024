@@ -20,21 +20,7 @@ public class RandomBot extends Bot {
         final Cell[][] board = field.getBoard();
         final Player player = game.getPlayerByName(name);
 
-        long fleetCount = Arrays.stream(board)
-                .flatMap(Arrays::stream)
-                .filter(cell -> cell.getFleet() != null && Objects.equals(cell.getFleet().getOwner().getName(), player.getName())).count();
-        if (fleetCount == 0) {
-            return new Move(null, null, Move.MoveType.SKIP, 0);
-        }
-
-        Cell startCell = Arrays.stream(board)
-                .flatMap(Arrays::stream)
-                .filter(cell -> cell.getFleet() != null && Objects.equals(cell.getFleet().getOwner().getName(), player.getName()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Нет клеток с флотом"));
-        startCell.getFleet().addFleetMoves(field);
-
-        availableMoves = startCell.getFleet().getFleetMoves();
+        availableMoves = game.availableMoves(name);
         availableMoves.removeIf(move -> PointsCalculator.costMovement(move.startPosition(), move.endPosition()) > player.getTotalGamePoints());
 
         if (availableMoves.isEmpty()) {
