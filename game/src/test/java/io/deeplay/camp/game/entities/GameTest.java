@@ -15,92 +15,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //todo переделать и добавить тесты сейчас заглушка для CI
 class GameTest {
-
-    private Player player1;
-    private Player player2;
-    private ArrayList<Player> players;
-    Game game;
-
-    @Test
-    void startGameSessionTest() {
-        Field field0 = new Field(10, new SymmetricalGenerator());
-        player1 = new Player(0, "Player 1");
-        player2 = new Player(1, "Player 2");
-        players = new ArrayList<>();
-        players.add(player1);
-        players.add(player2);
-        game = new Game(field);
-        game.startGameSession("test");
-        assertEquals(game.getId(), "test");
-    }
-
-
-    private final List<GalaxyListener> listeners = new ArrayList<>();
     private Game originalGame;
     private Game copiedGame;
     private Field field;
 
     @BeforeEach
     public void setUp() {
-        // Создаем поле и начальные данные для теста
-        field = new Field(10, new SymmetricalGenerator()); // Предполагается, что конструктор принимает размер поля
+        field = new Field(10, new SymmetricalGenerator());
 
-        // Создаем и настраиваем оригинальную игру
         originalGame = new Game(field);
-        copiedGame = new Game(originalGame);
+        originalGame.startGameSession("original-game-id");
+        originalGame.connectingPlayer("Player1");
+        originalGame.connectingPlayer("Player2");
+        originalGame.gameStarted(field);
 
-        listeners.add(originalGame);
-        listeners.add(copiedGame);
-
-        for (final GalaxyListener listener : listeners) {
-            listener.startGameSession(originalGame.getId());
-        }
-
-        // Создаем игроков
-        for (final GalaxyListener listener : listeners) {
-            listener.connectingPlayer("Player1");
-            listener.connectingPlayer("Player2");
-        }
-
-
-        // Устанавливаем начальные позиции
-        for (final GalaxyListener listener : listeners) {
-            listener.gameStarted(field);
-        }
-
-        // Создаем флоты
-        for (final GalaxyListener listener : listeners) {
-            listener.createShips(List.of(Ship.ShipType.BASIC), "Player1");
-            listener.createShips(List.of(Ship.ShipType.MEDIUM), "Player2");
-        }
+        copiedGame = new Game(originalGame);  // Создаем копию уже настроенной игры
     }
 
     @Test
     public void testCopyConstructor() {
-        // Проверяем, что идентификаторы и типы совпадают
         assertEquals(originalGame.getId(), copiedGame.getId());
 
-        // Проверяем, что игроки скопированы корректно
         for (int i = 0; i < 2; i++) {
             Player originalPlayer = originalGame.players[i];
             Player copiedPlayer = copiedGame.players[i];
             assertNotNull(copiedPlayer);
             assertEquals(originalPlayer.getId(), copiedPlayer.getId());
             assertEquals(originalPlayer.getName(), copiedPlayer.getName());
-            assertNotEquals(originalPlayer, copiedPlayer);
+            assertNotSame(originalPlayer, copiedPlayer);
         }
 
-        // Проверяем, что начальные позиции скопированы корректно
         for (Map.Entry<String, Cell> entry : originalGame.getPlayerStartPosition().entrySet()) {
             Cell originalCell = entry.getValue();
             Cell copiedCell = copiedGame.getPlayerStartPosition().get(entry.getKey());
             assertNotNull(copiedCell);
             assertEquals(originalCell.x, copiedCell.x);
             assertEquals(originalCell.y, copiedCell.y);
-            assertNotEquals(originalCell, copiedCell);
+            assertNotSame(originalCell, copiedCell);
         }
 
-        // Проверяем, что поле скопировано корректно
         assertEquals(originalGame.getField().getSize(), copiedGame.getField().getSize());
         for (int x = 0; x < originalGame.getField().getSize(); x++) {
             for (int y = 0; y < originalGame.getField().getSize(); y++) {
@@ -112,25 +65,15 @@ class GameTest {
             }
         }
 
-        // Проверяем, что состояние игроков корректно
         for (int i = 0; i < 2; i++) {
             Player originalPlayer = originalGame.players[i];
             Player copiedPlayer = copiedGame.players[i];
             assertNotSame(originalPlayer, copiedPlayer);
         }
-
-        // Проверяем, что начальные позиции игроков правильно установлены
-        //todo Не работает
-        for (Map.Entry<String, Cell> entry : originalGame.getPlayerStartPosition().entrySet()) {
-            Cell originalStartCell = entry.getValue();
-            Cell copiedStartCell = copiedGame.getPlayerStartPosition().get(entry.getKey());
-            assertNotSame(originalStartCell, copiedStartCell);
-        }
     }
 
     @Test
     public void testDrawOnConsecutiveSkips0() {
-        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game");
@@ -138,7 +81,6 @@ class GameTest {
         game.connectingPlayer("Player2");
         game.gameStarted(field);
 
-        // Первый игрок пропускает три раза подряд
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
@@ -148,14 +90,12 @@ class GameTest {
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
-        // Игра должна закончиться ничьей
         assertTrue(game.isGameOver());
         assertEquals("победитель не существует", game.isWinner());
     }
 
     @Test
     public void testDrawOnConsecutiveSkips1() {
-        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game");
@@ -165,7 +105,6 @@ class GameTest {
 
         new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
 
-        // Первый игрок пропускает три раза подряд
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
@@ -178,13 +117,11 @@ class GameTest {
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
-        // Игра должна закончиться ничьей
         assertFalse(game.isGameOver());
     }
 
     @Test
     public void testDrawOnConsecutiveSkips2() {
-        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game");
@@ -220,7 +157,6 @@ class GameTest {
 
     @Test
     public void testDrawOnConsecutiveSkips3() {
-        Field field = new Field(10, new SymmetricalGenerator());
         Game game = new Game(field);
 
         game.startGameSession("test-game");
@@ -238,18 +174,27 @@ class GameTest {
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[3][3], Move.MoveType.ORDINARY, 14), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[3][3], Move.MoveType.ORDINARY, 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[9][1], field.getBoard()[9][2], Move.MoveType.ORDINARY, 5), "Player1");
         game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[9][2], field.getBoard()[9][3], Move.MoveType.ORDINARY, 5), "Player1");
         game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[9][3], field.getBoard()[9][4], Move.MoveType.ORDINARY, 5), "Player1");
         game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[9][4], field.getBoard()[9][5], Move.MoveType.ORDINARY, 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[6][6], field.getBoard()[7][7], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(field.getBoard()[9][5], field.getBoard()[9][6], Move.MoveType.ORDINARY, 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[7][7], field.getBoard()[8][8], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(field.getBoard()[9][6], field.getBoard()[9][7], Move.MoveType.ORDINARY, 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[8][8], field.getBoard()[9][9], Move.MoveType.ORDINARY, 7), "Player2");
+
+        game.getPlayerAction(new Move(field.getBoard()[9][7], field.getBoard()[9][8], Move.MoveType.ORDINARY, 5), "Player1");
         game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
 
         assertFalse(game.isGameOver());

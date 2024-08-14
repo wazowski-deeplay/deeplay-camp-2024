@@ -28,17 +28,35 @@ public class Game implements GalaxyListener {
 
     // Конструктор копирования
     public Game(Game other) {
-        // Глубокое копирование поля
+        // Глубокое копирование поля (предполагается, что Field имеет конструктор копирования)
         this.field = new Field(other.field);
 
+        // Копирование идентификатора игры
         this.id = other.id;
 
-        // Копируем информацию об именах игроков и начальных позициях
-        this.playerNames = new HashMap<>(other.playerNames.size());
-        this.playerStartPosition = new HashMap<>(other.playerStartPosition.size());
+        // Глубокое копирование игроков
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            this.players[i] = new Player(other.players[i]);
+        }
 
-        // Устанавливаем, какой игрок ходит следующим (начальное состояние)
+        // Глубокое копирование имен игроков
+        this.playerNames = new HashMap<>();
+        for (Map.Entry<String, Player> entry : other.playerNames.entrySet()) {
+            this.playerNames.put(entry.getKey(), new Player(entry.getValue()));
+        }
+
+        // Глубокое копирование начальных позиций игроков
+        this.playerStartPosition = new HashMap<>();
+        for (Map.Entry<String, Cell> entry : other.playerStartPosition.entrySet()) {
+            this.playerStartPosition.put(entry.getKey(), new Cell(entry.getValue()));
+        }
+
+        // Копирование состояния следующего игрока
         this.nextPlayerToAct = other.nextPlayerToAct;
+
+        // Копирование флагов и счетчиков
+        this.skipException = other.skipException;
+        this.consecutiveSkipCounts = Arrays.copyOf(other.consecutiveSkipCounts, other.consecutiveSkipCounts.length);
     }
 
     public String getId() {
