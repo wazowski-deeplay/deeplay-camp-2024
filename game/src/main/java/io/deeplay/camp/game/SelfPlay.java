@@ -93,7 +93,7 @@ public class SelfPlay implements GalaxyListener {
             final PlayerInterface player = playerNamesMap.computeIfAbsent(nextPlayerToAct, (key) -> {
                 throw new IllegalStateException("There is no player with name " + key);
             });
-
+            if (moveCounter % 6 == 0) addCredits();
             Answer answer = null;
 
             CompletableFuture<Answer> future = CompletableFuture.supplyAsync(() -> player.getAnswer(game.getField()), executor);
@@ -116,7 +116,7 @@ public class SelfPlay implements GalaxyListener {
                 getPlayerAction(answer.getMove(), nextPlayerToAct);
             }
             moveCounter++;
-            if (moveCounter % 6 == 0) addCredits();
+
         }
         if (winner == null) {
             winner = game.isWinner();

@@ -10,14 +10,12 @@ public class RandomBot extends Bot {
     private List<Move> availableMoves;
 
     protected RandomBot(final String name, final Field field) {
-        super(name, field);  // Передаем копию поля
+        super(name, field, BotType.RandomBot);  // Передаем копию поля
         this.random = new Random();
     }
 
     @Override
     public Move getMove() {
-        final Field field = game.getField();  // Получаем копию поля
-        final Cell[][] board = field.getBoard();
         final Player player = game.getPlayerByName(name);
 
         availableMoves = game.availableMoves(name);
@@ -32,25 +30,28 @@ public class RandomBot extends Bot {
 
     @Override
     public List<Ship.ShipType> buyFleets() {
-        List<Ship.ShipType> shipList = new ArrayList<>();
+        List<Ship.ShipType> purchasedShips = new ArrayList<>();
         final Player player = game.getPlayerByName(name);
-        Ship.ShipType[] shipTypes = Ship.ShipType.values();
-        int pointsBeforeBuy = player.getTotalGamePoints();
-        int pointsAfterBuy = player.getTotalGamePoints();
+        Ship.ShipType[] availableShipTypes = Ship.ShipType.values();
+        int remainingPoints = player.getTotalGamePoints();
+        int maxShipsToBuy = random.nextInt(remainingPoints / 10) + 1;
+        int shipsPurchased = 0;
 
-        while (true) {
-            int randomIndex = random.nextInt(shipTypes.length);
-            Ship.ShipType selectedShipType = shipTypes[randomIndex];
+        while (shipsPurchased < maxShipsToBuy) {
+            int randomIndex = random.nextInt(availableShipTypes.length);
+            Ship.ShipType selectedShipType = availableShipTypes[randomIndex];
             int shipCost = selectedShipType.getShipPower() / 10;
 
-            if (pointsAfterBuy >= shipCost) {
-                shipList.add(selectedShipType);
-                pointsAfterBuy -= shipCost;
-                if (pointsAfterBuy < 10 || pointsAfterBuy <= pointsBeforeBuy / (randomIndex + 1) || shipList.size() >= 6 - randomIndex)
-                    break;
+            if (remainingPoints >= shipCost) {
+                purchasedShips.add(selectedShipType);
+                remainingPoints -= shipCost;
+                shipsPurchased++;
+            }
+            if (remainingPoints < 10 || (shipsPurchased > 0 && random.nextInt(10) < 2)) {
+                break;
             }
         }
-        return shipList;
+        return purchasedShips;
     }
 
     public static class Factory extends BotFactory {

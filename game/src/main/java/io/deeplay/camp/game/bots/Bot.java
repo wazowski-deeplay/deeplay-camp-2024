@@ -22,11 +22,12 @@ public abstract class Bot implements PlayerInterface {
      * aka контроллер
      */
     protected final Game game;
+    protected final BotType botType;
 
-
-    protected Bot(final String name, final Field field) {
+    protected Bot(final String name, final Field field, BotType botType) {
         this.game = new Game(new Field(field));
         this.name = name;
+        this.botType = botType;
     }
 
     @Override
@@ -34,7 +35,7 @@ public abstract class Bot implements PlayerInterface {
         Player player = game.getPlayerByName(name);
         Cell startCell = game.getPlayerStartPosition().get(name);
 
-        if (FleetDecisionHelper.shouldBuyFleet(startCell, player)) {
+        if (FleetDecisionHelper.shouldBuyFleet(startCell, player, botType)) {
             return new Answer(buyFleets());
         } else {
             return new Answer(getMove());
@@ -136,6 +137,12 @@ public abstract class Bot implements PlayerInterface {
     @Override
     public void endGameSession() {
         game.endGameSession();
+    }
+
+    // Варианты ботов
+    public enum BotType {
+        RandomBot
+
     }
 
     /**

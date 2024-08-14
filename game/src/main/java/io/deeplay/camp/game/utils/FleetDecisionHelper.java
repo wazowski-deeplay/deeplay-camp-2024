@@ -1,5 +1,6 @@
 package io.deeplay.camp.game.utils;
 
+import io.deeplay.camp.game.bots.Bot;
 import io.deeplay.camp.game.entites.Cell;
 import io.deeplay.camp.game.entites.Player;
 
@@ -15,13 +16,18 @@ public class FleetDecisionHelper {
     }
 
     public static boolean isAvailablePosition(Cell startCell, String playerName) {
-        return startCell.getFleet() == null || startCell.getFleet().getOwner().getName().equals(playerName);
+        return startCell.planet.getOwner().getName().equals(playerName) && (startCell.getFleet() == null || startCell.getFleet().getOwner().getName().equals(playerName));
     }
 
-    public static boolean shouldBuyFleet(Cell startCell, Player player) {
+    public static boolean isRandomBot(Bot.BotType botType) {
+        return botType == Bot.BotType.RandomBot;
+    }
+
+    public static boolean shouldBuyFleet(Cell startCell, Player player, Bot.BotType botType) {
         Random random = new Random();
         int randomValue = random.nextInt(10);
-        return isAvailablePosition(startCell, player.getName())
+        return isRandomBot(botType)
+                && isAvailablePosition(startCell, player.getName())
                 && hasEnoughPoints(player)
                 && (hasNoFleet(player)
                 || randomValue < 2);
