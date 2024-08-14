@@ -29,6 +29,24 @@ public class Player {
         this.controlledPlanet = new ArrayList<>();
     }
 
+    public Player(Player other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.totalGamePoints = other.totalGamePoints;
+
+        // Глубокое копирование fleetList
+        this.fleetList = new ArrayList<>();
+        for (Fleet fleet : other.fleetList) {
+            this.fleetList.add(new Fleet(fleet));
+        }
+
+        // Глубокое копирование controlledPlanet
+        this.controlledPlanet = new ArrayList<>();
+        for (Planet planet : other.controlledPlanet) {
+            this.controlledPlanet.add(new Planet(planet));
+        }
+    }
+
     public String getName() {
         return name;
     }

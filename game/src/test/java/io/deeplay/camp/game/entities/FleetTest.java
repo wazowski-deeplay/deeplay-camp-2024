@@ -158,17 +158,10 @@ class FleetTest {
     //todo посмотреть что с переопределением хэшкода сейчас StackOverflow хотя Objects.hash должен исключать такое(?)
     @Test
     public void testEqualsAndHashCode() {
-//        ArrayList<Ship> otherShipList = new ArrayList<>(List.of(
-//                new Ship(Ship.ShipType.BASIC, fleet)
-//        ));
-//        Fleet sameFleet = new Fleet(otherShipList, new Cell(0, 0), player);
-//        Fleet differentFleet = new Fleet(new ArrayList<>(), new Cell(6, 6), enemy);
-//
-//        assertEquals(fleet, sameFleet);
-//        assertNotEquals(fleet, differentFleet);
-//
-//        assertEquals(fleet.hashCode(), sameFleet.hashCode());
-//        assertNotEquals(fleet.hashCode(), differentFleet.hashCode());
+        Fleet differentFleet = new Fleet(new ArrayList<>(), new Cell(6, 6), enemy);
+
+        assertNotEquals(fleet, differentFleet);
+        assertNotEquals(fleet.hashCode(), differentFleet.hashCode());
     }
 
     @Test
@@ -254,4 +247,17 @@ class FleetTest {
         assertNotEquals(originalFleet.getShipList().size(), copiedFleet.getShipList().size());
     }
 
+    @Test
+    void testCopiedFleetHaveOtherOwner(){
+        Player copyPlayer = new Player(player);
+        Fleet newFleet = new Fleet(new Cell(1, 1), player);
+
+        assertFalse(copyPlayer.fleetList.contains(newFleet));
+        assertTrue(player.fleetList.contains(newFleet));
+
+        Fleet anotherFleet = new Fleet(new Cell(2, 2), copyPlayer);
+
+        assertFalse(player.fleetList.contains(anotherFleet));
+        assertTrue(copyPlayer.fleetList.contains(anotherFleet));
+    }
 }

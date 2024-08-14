@@ -60,8 +60,7 @@ public class Fleet extends GalaxyEntity {
         this.fleetPower = other.fleetPower;
         this.owner = other.owner; // Предполагаем, что Player является неизменяемым объектом или копируем его соответствующим образом
         this.fleetMoves = new ArrayList<>(other.fleetMoves); // Предполагаем, что Move является неизменяемым объектом или копируем его соответствующим образом
-        owner.addFleet(this);
-        fleetPosition.setFleet(this);
+        this.fleetPosition.setFleet(this);
     }
 
 
