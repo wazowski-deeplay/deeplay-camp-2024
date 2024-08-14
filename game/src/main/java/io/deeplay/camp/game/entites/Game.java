@@ -51,6 +51,16 @@ public class Game implements GalaxyListener {
             this.playerStartPosition.put(entry.getKey(), new Cell(entry.getValue()));
         }
 
+        for (int x = 0; x < other.field.getSize(); x++) {
+            for (int y = 0; y < other.field.getSize(); y++) {
+                Cell originalCell = other.field.getBoard()[x][y];
+                Cell copiedCell = this.field.getBoard()[x][y];
+                if (originalCell.getFleet() != null) {
+                    copiedCell.setFleet(new Fleet(originalCell.getFleet()));
+                }
+            }
+        }
+
         // Копирование состояния следующего игрока
         this.nextPlayerToAct = other.nextPlayerToAct;
 

@@ -199,4 +199,91 @@ class GameTest {
 
         assertFalse(game.isGameOver());
     }
+    @Test
+    public void testCopyConstructorPreservesState() {
+        List<Ship.ShipType> startShips = new ArrayList<>();
+        startShips.add(Ship.ShipType.BASIC);
+        originalGame.createShips(startShips, originalGame.getPlayerByName("Player1").getName());
+
+        originalGame.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        originalGame.getPlayerAction(new Move(field.getBoard()[0][9], field.getBoard()[1][9], Move.MoveType.ORDINARY, 5), "Player2");
+
+        copiedGame = new Game(originalGame);
+
+        assertEquals(originalGame.getField().getSize(), copiedGame.getField().getSize());
+        for (int x = 0; x < originalGame.getField().getSize(); x++) {
+            for (int y = 0; y < originalGame.getField().getSize(); y++) {
+                Cell originalCell = originalGame.getField().getBoard()[x][y];
+                Cell copiedCell = copiedGame.getField().getBoard()[x][y];
+                assertEquals(originalCell.x, copiedCell.x);
+                assertEquals(originalCell.y, copiedCell.y);
+            }
+        }
+    }
+
+    @Test
+    public void testCopyConstructorDeepCopyPlayers() {
+        copiedGame = new Game(originalGame);
+
+        for (int i = 0; i < originalGame.players.length; i++) {
+            Player originalPlayer = originalGame.players[i];
+            Player copiedPlayer = copiedGame.players[i];
+
+            assertNotSame(originalPlayer, copiedPlayer, "Игроки должны быть разными объектами");
+            assertEquals(originalPlayer.getName(), copiedPlayer.getName(), "Имя игрока должно совпадать");
+            assertEquals(originalPlayer.getId(), copiedPlayer.getId(), "ID игрока должно совпадать");
+        }
+    }
+
+    @Test
+    public void testFleetInitializationInOriginal() {
+        Fleet originalFleet = new Fleet(field.getBoard()[0][0], originalGame.getPlayerByName("Player1"));
+        assertNotNull(field.getBoard()[0][0].getFleet(), "Флот должен существовать в оригинальной игре");
+    }
+
+    @Test
+    public void testCopyConstructorDeepCopyFleets() {
+        Fleet originalFleet = new Fleet(field.getBoard()[0][0], originalGame.getPlayerByName("Player1"));
+
+        copiedGame = new Game(originalGame);
+
+        Fleet copiedFleet = copiedGame.getField().getBoard()[0][0].getFleet();
+        assertNotNull(copiedFleet, "Флот должен существовать в копии");
+        assertNotSame(originalFleet, copiedFleet, "Флотилии должны быть разными объектами");
+        assertEquals(originalFleet.getFleetPosition(), copiedFleet.getFleetPosition(), "Позиция флота должна совпадать");
+    }
+
+    /*@Test
+    public void testCopyConstructorPlayerActionsIndependent() {
+        List<Ship.ShipType> startShips = new ArrayList<>();
+        startShips.add(Ship.ShipType.BASIC);
+        originalGame.createShips(startShips, originalGame.getPlayerByName("Player1").getName());
+        originalGame.createShips(startShips, originalGame.getPlayerByName("Player2").getName());
+        copiedGame = new Game(originalGame);
+
+        copiedGame.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
+        originalGame.getPlayerAction(new Move(field.getBoard()[9][0], field.getBoard()[9][1], Move.MoveType.ORDINARY, 5), "Player2");
+        assertNotEquals(originalGame.getField().getBoard()[9][1].getFleet(), copiedGame.getField().getBoard()[9][1].getFleet(), "Флотилии должны быть независимыми");
+    }*/
+
+    @Test
+    public void testCopyConstructorComplexState() {
+        Fleet originalFleet1 = new Fleet(field.getBoard()[0][0], originalGame.getPlayerByName("Player1"));
+        Fleet originalFleet2 = new Fleet(field.getBoard()[9][9], originalGame.getPlayerByName("Player2"));
+
+        originalGame.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player1");
+        originalGame.getPlayerAction(new Move(field.getBoard()[9][9], field.getBoard()[8][8], Move.MoveType.ORDINARY, 7), "Player2");
+
+        copiedGame = new Game(originalGame);
+
+        Fleet copiedFleet1 = copiedGame.getField().getBoard()[1][1].getFleet();;
+        Fleet copiedFleet2 = copiedGame.getField().getBoard()[8][8].getFleet();;
+
+        assertNotNull(copiedFleet1, "Флот1 должен существовать в копии");
+        assertNotNull(copiedFleet2, "Флот2 должен существовать в копии");
+
+        assertNotSame(originalFleet1, copiedFleet1, "Флот1 должен быть независимым");
+        assertNotSame(originalFleet2, copiedFleet2, "Флот2 должен быть независимым");
+    }
+
 }
