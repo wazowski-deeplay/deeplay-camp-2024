@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BotTest {
     private static class TestBot extends Bot {
-        protected TestBot(final String name, final Field field, final BotType botType) {
-            super(name, field, botType);
+        protected TestBot(final String name, final Field field) {
+            super(name, field);
         }
 
         public static class Factory extends BotFactory {
@@ -23,7 +23,7 @@ class BotTest {
 
             @Override
             public TestBot createBot(final String name, final Field field) {
-                return new TestBot(name, field, BotType.RandomBot);
+                return new TestBot(name, field);
             }
         }
 

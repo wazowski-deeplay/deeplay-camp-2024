@@ -1,9 +1,7 @@
 package io.deeplay.camp.game.utils;
 
-import io.deeplay.camp.game.bots.Bot;
 import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Fleet;
-import io.deeplay.camp.game.entites.Planet;
 import io.deeplay.camp.game.entites.Player;
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.Test;
@@ -29,7 +27,7 @@ class FleetDecisionHelperTest {
         new Fleet(field.getBoard()[0][3], player2);
         field.getBoard()[0][3].planet.setOwner(player2);
         field.getBoard()[3][0].planet.setOwner(player1);
-        assertFalse(FleetDecisionHelper.shouldBuyFleet(field.getBoard()[0][3], player1, Bot.BotType.RandomBot));
-        assertTrue(FleetDecisionHelper.shouldBuyFleet(field.getBoard()[3][0], player1, Bot.BotType.RandomBot));
+        assertFalse(FleetDecisionHelper.shouldBuyFleet(field.getBoard()[0][3], player1));
+        assertTrue(FleetDecisionHelper.shouldBuyFleet(field.getBoard()[3][0], player1));
     }
 }

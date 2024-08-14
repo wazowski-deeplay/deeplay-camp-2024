@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
-import io.deeplay.camp.game.utils.FleetDecisionHelper;
 import io.deeplay.camp.game.utils.ValidationMove;
 
 /**
@@ -22,24 +21,15 @@ public abstract class Bot implements PlayerInterface {
      * aka контроллер
      */
     protected final Game game;
-    protected final BotType botType;
 
-    protected Bot(final String name, final Field field, BotType botType) {
+    protected Bot(final String name, final Field field) {
         this.game = new Game(new Field(field));
         this.name = name;
-        this.botType = botType;
     }
 
     @Override
     public Answer getAnswer(final Field field) {
-        Player player = game.getPlayerByName(name);
-        Cell startCell = game.getPlayerStartPosition().get(name);
-
-        if (FleetDecisionHelper.shouldBuyFleet(startCell, player, botType)) {
-            return new Answer(buyFleets());
-        } else {
             return new Answer(getMove());
-        }
     }
 
     protected abstract Move getMove();
@@ -137,12 +127,6 @@ public abstract class Bot implements PlayerInterface {
     @Override
     public void endGameSession() {
         game.endGameSession();
-    }
-
-    // Варианты ботов
-    public enum BotType {
-        RandomBot
-
     }
 
     /**

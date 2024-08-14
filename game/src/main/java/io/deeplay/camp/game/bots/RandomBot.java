@@ -1,6 +1,7 @@
 package io.deeplay.camp.game.bots;
 
 import io.deeplay.camp.game.entites.*;
+import io.deeplay.camp.game.utils.FleetDecisionHelper;
 import io.deeplay.camp.game.utils.PointsCalculator;
 
 import java.util.*;
@@ -10,7 +11,7 @@ public class RandomBot extends Bot {
     private List<Move> availableMoves;
 
     protected RandomBot(final String name, final Field field) {
-        super(name, field, BotType.RandomBot);  // Передаем копию поля
+        super(name, field);  // Передаем копию поля
         this.random = new Random();
     }
 
@@ -60,5 +61,17 @@ public class RandomBot extends Bot {
         public RandomBot createBot(final String name, final Field field) {
             return new RandomBot(name, field);  // Передаем копию поля
         }
+    }
+
+    @Override
+    public Answer getAnswer(Field field) {
+        Player player = game.getPlayerByName(name);
+        Cell startCell = game.getPlayerStartPosition().get(name);
+
+        if (FleetDecisionHelper.shouldBuyFleet(startCell, player)){
+            return new Answer(buyFleets());
+    } else {
+        return new Answer(getMove());
+    }
     }
 }

@@ -12,6 +12,7 @@ import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.boardGenerator.KMeansGenerator;
 import io.deeplay.camp.game.interfaces.PlayerInterface;
 import io.deeplay.camp.game.utils.GameLogger;
+import io.deeplay.camp.game.utils.PointsCalculator;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -93,7 +94,7 @@ public class SelfPlay implements GalaxyListener {
             final PlayerInterface player = playerNamesMap.computeIfAbsent(nextPlayerToAct, (key) -> {
                 throw new IllegalStateException("There is no player with name " + key);
             });
-            if (moveCounter % 6 == 0) addCredits();
+            if (PointsCalculator.checkAddCredits(moveCounter)) addCredits();
             Answer answer = null;
 
             CompletableFuture<Answer> future = CompletableFuture.supplyAsync(() -> player.getAnswer(game.getField()), executor);

@@ -30,4 +30,7 @@ public final class PointsCalculator {
         return (int) Math.ceil(fleetPower / 100.0);
     }
 
+    public static boolean checkAddCredits(long moveCounter){
+        return moveCounter % 6 == 0 && moveCounter > 0;
+    }
 }
