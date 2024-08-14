@@ -68,6 +68,15 @@ public class Game implements GalaxyListener {
         return field.isWinner();
     }
 
+    //todo разделение флота
+    public List<Move> availableMoves(String player) {
+        List<Move> moves = new ArrayList<>();
+        for (Fleet fleet : playerNames.get(player).fleetList) {
+            fleet.addFleetMoves(field);
+            moves.addAll(fleet.getFleetMoves());
+        }
+        return moves;
+    }
 
     @Override
     public void startGameSession(String gameId) {
