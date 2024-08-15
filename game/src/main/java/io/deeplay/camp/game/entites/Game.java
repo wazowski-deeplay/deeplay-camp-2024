@@ -83,18 +83,23 @@ public class Game implements GalaxyListener {
 
 
     public boolean isGameOver() {
-        // Если игра завершена из-за 3 подряд пропусков у обоих игроков, завершаем игру
-        if (skipException) {
-            return true;
-        }
-        // Проверяем исходную логику завершения игры (например, контроль всех планет одним игроком)
-        return field.isGameOver();
+        return checkConsecutiveSkips() || isCheckPlayer0Fail() || isCheckPlayer1Fail() || field.isGameOver();
+    }
+
+    private boolean checkConsecutiveSkips() {
+        return skipException;
     }
 
     public String isWinner() {
         // Если игра завершена из-за 3 подряд пропусков у обоих игроков, возвращаем "ничья"
         if (skipException) {
             return "победитель не существует";
+        }
+        if (isCheckPlayer0Fail()) {
+            return players[1].getName();
+        }
+        if (isCheckPlayer1Fail()) {
+            return players[0].getName();
         }
         // В противном случае возвращаем победителя по исходной логике (контроль всех планет)
         return field.isWinner();
@@ -135,6 +140,8 @@ public class Game implements GalaxyListener {
         playerStartPosition.get(players[0].getName()).planet.setOwner(players[0]);
         playerStartPosition.get(players[1].getName()).planet.setOwner(players[1]);
 
+        players[0].controlledPlanet.add(this.field.getBoard()[0][this.field.getSize() - 1].planet);
+        players[1].controlledPlanet.add(this.field.getBoard()[this.field.getSize() - 1][0].planet);
     }
 
 
@@ -208,6 +215,13 @@ public class Game implements GalaxyListener {
         switchPlayerToAct();
     }
 
+    private boolean isCheckPlayer0Fail() {
+        return !players[0].controlledPlanet.contains(this.field.getBoard()[0][this.field.getSize() - 1].planet) && players[0].fleetList.isEmpty();
+    }
+
+    private boolean isCheckPlayer1Fail() {
+        return !players[1].controlledPlanet.contains(this.field.getBoard()[this.field.getSize() - 1][0].planet) && players[1].fleetList.isEmpty();
+    }
 
     @Override
     public void gameEnded(String winner) {
