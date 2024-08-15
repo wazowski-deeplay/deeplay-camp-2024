@@ -69,6 +69,10 @@ public class Game implements GalaxyListener {
         this.consecutiveSkipCounts = Arrays.copyOf(other.consecutiveSkipCounts, other.consecutiveSkipCounts.length);
     }
 
+    public Game getCopy(Game originalGame){
+        return new Game(originalGame);
+    }
+
     public String getId() {
         return id;
     }

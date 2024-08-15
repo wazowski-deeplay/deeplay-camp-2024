@@ -253,19 +253,6 @@ class GameTest {
         assertEquals(originalFleet.getFleetPosition(), copiedFleet.getFleetPosition(), "Позиция флота должна совпадать");
     }
 
-    /*@Test
-    public void testCopyConstructorPlayerActionsIndependent() {
-        List<Ship.ShipType> startShips = new ArrayList<>();
-        startShips.add(Ship.ShipType.BASIC);
-        originalGame.createShips(startShips, originalGame.getPlayerByName("Player1").getName());
-        originalGame.createShips(startShips, originalGame.getPlayerByName("Player2").getName());
-        copiedGame = new Game(originalGame);
-
-        copiedGame.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        originalGame.getPlayerAction(new Move(field.getBoard()[9][0], field.getBoard()[9][1], Move.MoveType.ORDINARY, 5), "Player2");
-        assertNotEquals(originalGame.getField().getBoard()[9][1].getFleet(), copiedGame.getField().getBoard()[9][1].getFleet(), "Флотилии должны быть независимыми");
-    }*/
-
     @Test
     public void testCopyConstructorComplexState() {
         Fleet originalFleet1 = new Fleet(field.getBoard()[0][0], originalGame.getPlayerByName("Player1"));
