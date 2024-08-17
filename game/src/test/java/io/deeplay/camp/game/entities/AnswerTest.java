@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,7 @@ public class AnswerTest {
 
     @BeforeEach
     public void setUp() {
-        move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, 5);
+        move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, new ArrayList<>(), 5);
         answer = new Answer(move);
     }
 

@@ -2,7 +2,6 @@ package io.deeplay.camp.game.bots;
 
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
-import io.deeplay.camp.game.utils.PointsCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +39,7 @@ class BotTest {
                     .flatMap(Arrays::stream)
                     .filter(cell -> cell.getFleet() != null && Objects.equals(cell.getFleet().getOwner().getName(), player.getName())).count();
             if (fleetCount == 0) {
-                return new Move(null, null, Move.MoveType.SKIP, 0);
+                return new Move(null, null, Move.MoveType.SKIP, null, 0);
             }
 
             Cell startCell = Arrays.stream(board)
@@ -51,10 +50,9 @@ class BotTest {
             startCell.getFleet().addFleetMoves(field);
 
             availableMoves = startCell.getFleet().getFleetMoves();
-            availableMoves.removeIf(move -> PointsCalculator.costMovement(move.startPosition(), move.endPosition()) > player.getTotalGamePoints());
 
             if (availableMoves.isEmpty()) {
-                return new Move(null, null, Move.MoveType.SKIP, 0);
+                return new Move(null, null, Move.MoveType.SKIP, null, 0);
             }
 
             return availableMoves.get(random.nextInt(availableMoves.size()));
@@ -117,7 +115,7 @@ class BotTest {
 
     @Test
     void testGetPlayerAction_InvalidPlayer() {
-        Move move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, 7);
+        Move move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, new ArrayList<>(), 7);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> bot.getPlayerAction(move, "invalidPlayer"));
         assertEquals("Отсутствует игрок: invalidPlayer", exception.getMessage());
     }
@@ -125,7 +123,7 @@ class BotTest {
     @Test
     void testGetPlayerAction_InvalidTurn() {
         Player player2 = new Player(1, "player2");
-        Move move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, 7);
+        Move move = new Move(new Cell(0, 0), new Cell(1, 1), Move.MoveType.ORDINARY, new ArrayList<>(), 7);
 
         game.connectingPlayer(player.getName());
         game.connectingPlayer(player2.getName());

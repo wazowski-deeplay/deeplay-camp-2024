@@ -22,7 +22,7 @@ public class GameLoggerTest {
         Cell endPositionSM = new Cell(1, 1);
         Cell startPositionSM = new Cell(0, 4);
 
-        Move move = new Move(startPositionSM, endPositionSM, Move.MoveType.ORDINARY, 5);
+        Move move = new Move(startPositionSM, endPositionSM, Move.MoveType.ORDINARY, new ArrayList<>(), 5);
         List<Ship.ShipType> ships = new ArrayList<>();
         ships.add(Ship.ShipType.BASIC);
         gameLogger.startGameSession(gameId);

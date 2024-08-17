@@ -64,7 +64,7 @@ public class Player {
     }
 
     public void addTotalGamePoints() {
-        totalGamePoints += 30 + getCurrentGamePoints();
+        totalGamePoints += 20 + getCurrentGamePoints();
     }
 
     /**
@@ -74,7 +74,7 @@ public class Player {
      */
     public int getCurrentGamePoints() {
         return controlledPlanet.stream()
-                .mapToInt(planet -> (int) Math.ceil(planet.getPoints() / 100.0) + 5)
+                .mapToInt(planet -> (int) Math.ceil(planet.getPoints() / 100.0) + 3)
                 .sum();
     }
 

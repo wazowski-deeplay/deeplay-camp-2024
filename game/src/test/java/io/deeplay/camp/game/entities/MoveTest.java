@@ -5,6 +5,9 @@ import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,7 +20,7 @@ class MoveTest {
     public void setUp() {
         startPositionSM = new Cell(1, 1);
         endPositionSM = new Cell(5, 5);
-        move = new Move(startPositionSM, endPositionSM, Move.MoveType.ORDINARY, 5);
+        move = new Move(startPositionSM, endPositionSM, Move.MoveType.ORDINARY, new ArrayList<>(), 5);
     }
 
     @Test
@@ -36,8 +39,8 @@ class MoveTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        Move sameMove = new Move(new Cell(1, 1), new Cell(5, 5), Move.MoveType.ORDINARY, 5);
-        Move differentMove = new Move(new Cell(2, 2), new Cell(5, 5), Move.MoveType.ORDINARY, 5);
+        Move sameMove = new Move(new Cell(1, 1), new Cell(5, 5), Move.MoveType.ORDINARY, new ArrayList<>(), 5);
+        Move differentMove = new Move(new Cell(2, 2), new Cell(5, 5), Move.MoveType.ORDINARY, new ArrayList<>(), 5);
 
         assertEquals(move, sameMove);
         assertNotEquals(move, differentMove);
@@ -49,7 +52,7 @@ class MoveTest {
     Cell startPosition = new Cell(0, 0);
     Cell toPosition = new Cell(1, 1);
     Cell endPosition = new Cell(2, 2);
-    private final Move moveOrdinary = new Move(startPosition, toPosition, Move.MoveType.ORDINARY, 5);
+    private final Move moveOrdinary = new Move(startPosition, toPosition, Move.MoveType.ORDINARY, new ArrayList<>(), 5);
 
     @Test
     void testToString1() {
@@ -74,7 +77,7 @@ class MoveTest {
     @Test
     void testMoveToEmptyCell() {
         Field field = new Field(10, new SymmetricalGenerator());
-        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
+        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, new ArrayList<>(), 5);
         Player player = new Player(0, "0");
         Fleet fleet = new Fleet(field.getBoard()[0][0], player);
         field.getBoard()[0][0].setFleet(fleet);
@@ -88,7 +91,7 @@ class MoveTest {
     @Test
     void testMoveToStrongEnemyFleet() {
         Field field = new Field(10, new SymmetricalGenerator());
-        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
+        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, new ArrayList<>(), 5);
         Player player1 = new Player(0, "0");
         Player player2 = new Player(1, "1");
         Fleet fleet1 = new Fleet(field.getBoard()[0][0], player1);
@@ -105,12 +108,13 @@ class MoveTest {
     @Test
     void testMoveToWeakEnemyFleet() {
         Field field = new Field(10, new SymmetricalGenerator());
-        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
         Player player1 = new Player(0, "0");
         Player player2 = new Player(1, "1");
         Fleet fleet1 = new Fleet(field.getBoard()[0][0], player1);
         Fleet fleet2 = new Fleet(field.getBoard()[2][2], player2);
-        new Ship(Ship.ShipType.MEDIUM, fleet1);
+        List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship(Ship.ShipType.MEDIUM, fleet1));
+        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, ships, 16);
         move.makeMove(player1);
         assertNull(field.getBoard()[0][0].getFleet());
         assertNotNull(field.getBoard()[2][2].getFleet());
@@ -121,7 +125,7 @@ class MoveTest {
     @Test
     void testMoveToJoinFleet() {
         Field field = new Field(10, new SymmetricalGenerator());
-        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, 5);
+        Move move = new Move(field.getBoard()[0][0], field.getBoard()[2][2], Move.MoveType.ORDINARY, new ArrayList<>(), 5);
         Player player = new Player(0, "0");
         Fleet fleet1 = new Fleet(field.getBoard()[0][0], player);
         new Fleet(field.getBoard()[2][2], player);

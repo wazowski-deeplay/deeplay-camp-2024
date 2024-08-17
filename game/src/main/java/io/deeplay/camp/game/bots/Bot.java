@@ -29,7 +29,7 @@ public abstract class Bot implements PlayerInterface {
 
     @Override
     public Answer getAnswer(final Field field) {
-            return new Answer(getMove());
+        return new Answer(getMove());
     }
 
     protected abstract Move getMove();
@@ -85,7 +85,7 @@ public abstract class Bot implements PlayerInterface {
         final Move move;
         if (move_.moveType() != Move.MoveType.SKIP) {
             Cell[][] b = game.getField().getBoard();
-            move = new Move(b[move_.startPosition().x][move_.startPosition().y], b[move_.endPosition().x][move_.endPosition().y], move_.moveType(), move_.cost());
+            move = new Move(b[move_.startPosition().x][move_.startPosition().y], b[move_.endPosition().x][move_.endPosition().y], move_.moveType(), move_.shipList(), move_.cost());
         } else {
             move = move_;
         }

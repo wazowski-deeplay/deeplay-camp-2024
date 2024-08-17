@@ -5,6 +5,8 @@ import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidationMoveTest {
@@ -19,7 +21,7 @@ class ValidationMoveTest {
     }
 
     private Move createMove(Cell start, Cell end, int cost) {
-        return new Move(start, end, Move.MoveType.ORDINARY, cost);
+        return new Move(start, end, Move.MoveType.ORDINARY, new ArrayList<>(), cost);
     }
 
     private void setFleetAt(Cell cell) {

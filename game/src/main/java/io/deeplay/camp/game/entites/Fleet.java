@@ -1,10 +1,6 @@
 package io.deeplay.camp.game.entites;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import io.deeplay.camp.game.utils.PointsCalculator;
 import io.deeplay.camp.game.utils.ValidationMove;
@@ -47,6 +43,7 @@ public class Fleet extends GalaxyEntity {
         owner = player;
         owner.addFleet(this);
         fleetPosition.setFleet(this);
+        this.fleetMoves = new ArrayList<>();
     }
 
     // Конструктор копирования
@@ -116,6 +113,32 @@ public class Fleet extends GalaxyEntity {
         }
 
         return result;
+    }
+
+    public List<Ship> updateFleet(List<Ship> newShipList) {
+        List<Ship> removedShips = new ArrayList<>();
+
+        Map<Ship.ShipType, Integer> newShipCounts = new HashMap<>();
+        for (Ship ship : newShipList) {
+            Ship.ShipType shipType = ship.getShipType();
+            newShipCounts.put(shipType, newShipCounts.getOrDefault(shipType, 0) + 1);
+        }
+
+        Iterator<Ship> iterator = shipList.iterator();
+        while (iterator.hasNext()) {
+            Ship ship = iterator.next();
+            Ship.ShipType shipType = ship.getShipType();
+
+            if (!newShipCounts.containsKey(shipType) || newShipCounts.get(shipType) == 0) { // Если этого типа корабля нет в newShipList или их количество превышает количество в newShipList, удаляем корабль из флота
+                iterator.remove();
+                removedShips.add(ship);
+            } else {
+                newShipCounts.put(shipType, newShipCounts.get(shipType) - 1);
+            }
+        }
+        updateFleetPower();
+
+        return removedShips; // лист удаленных кораблей
     }
 
     public List<Ship> removeShipsFromFleet(Map<Ship.ShipType, Integer> shipsToRemove) {
@@ -204,15 +227,53 @@ public class Fleet extends GalaxyEntity {
             int newY = currentCell.y + direction[1];
 
             if (ValidationMove.isPositionValid(new Cell(newX, newY), field.getSize()) && !map[newX][newY]) {
-                int cost = PointsCalculator.costMovement(fleetPosition, new Cell(newX, newY));
-                if (getOwner().getTotalGamePoints() >= cost) {
+                int cost = PointsCalculator.costMovement(fleetPosition, new Cell(newX, newY), null);
+                if (getOwner().getTotalGamePoints() > cost) {
                     Cell cell = field.getBoard()[newX][newY];
                     map[newX][newY] = true;
-                    fleetMoves.add(new Move(fleetPosition, cell, Move.MoveType.ORDINARY, cost));
+                    ungroupFleet(cell);
                 }
             }
         }
     }
+
+    public void ungroupFleet(Cell cell) {
+
+        if (shipList.size() == 1) {
+            if (owner.getTotalGamePoints() > PointsCalculator.costMovement(fleetPosition, cell, shipList)) {
+
+                fleetMoves.add(new Move(fleetPosition, cell, Move.MoveType.ORDINARY, shipList, PointsCalculator.costMovement(fleetPosition, cell, shipList)));
+            }
+        } else {
+            Set<List<Ship>> combinations = generateUniqueShipCombinations(shipList);
+
+            for (List<Ship> combination : combinations) {
+                if (owner.getTotalGamePoints() > PointsCalculator.costMovement(fleetPosition, cell, combination)) {
+
+                    fleetMoves.add(new Move(fleetPosition, cell, Move.MoveType.ORDINARY, combination, PointsCalculator.costMovement(fleetPosition, cell, combination)));
+                }
+            }
+        }
+    }
+
+private Set<List<Ship>> generateUniqueShipCombinations(List<Ship> ships) {
+    Set<List<Ship>> result = new HashSet<>();
+    int n = ships.size();
+
+    for (int i = 1; i < (1 << n); i++) {
+        List<Ship> combination = new ArrayList<>();
+        for (int j = 0; j < n; j++) {
+            if ((i & (1 << j)) != 0) {
+                combination.add(ships.get(j));
+            }
+        }
+        if (!combination.isEmpty()) {
+            result.add(combination);
+        }
+    }
+
+    return result;
+}
 
     public Player getOwner() {
         return owner;

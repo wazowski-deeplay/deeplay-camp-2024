@@ -25,7 +25,7 @@ class PointsCalculatorTest {
         Cell startCell = field.getBoard()[0][0];
         Cell endCell = field.getBoard()[0][3];
         startCell.setFleet(fleet);
-        int cost = PointsCalculator.costMovement(startCell, endCell);
+        int cost = PointsCalculator.costMovement(startCell, endCell, null);
         assertEquals(15, cost); // Стоимость прямого движения должна быть 15 (3 * 5)
     }
 
@@ -34,7 +34,7 @@ class PointsCalculatorTest {
         Cell startCell = field.getBoard()[0][0];
         Cell endCell = field.getBoard()[3][3];
         startCell.setFleet(fleet);
-        int cost = PointsCalculator.costMovement(startCell, endCell);
+        int cost = PointsCalculator.costMovement(startCell, endCell, null);
         assertEquals(21, cost); // Стоимость диагонального движения должно быть 21 (3 * 7)
     }
 
@@ -43,7 +43,7 @@ class PointsCalculatorTest {
         Cell startCell = field.getBoard()[0][0];
         Cell endCell = field.getBoard()[2][3];
         startCell.setFleet(fleet);
-        int cost = PointsCalculator.costMovement(startCell, endCell);
+        int cost = PointsCalculator.costMovement(startCell, endCell, null);
         assertEquals(19, cost); // Стоимость диагонального движения должно быть 19 (2 * 7 + 5)
     }
 
@@ -52,7 +52,7 @@ class PointsCalculatorTest {
         Cell startCell = field.getBoard()[0][0];
         Cell endCell = field.getBoard()[0][0];
         startCell.setFleet(fleet);
-        int cost = PointsCalculator.costMovement(startCell, endCell);
+        int cost = PointsCalculator.costMovement(startCell, endCell, null);
         assertEquals(0, cost); // Стоимость без движения должна быть 0
     }
 }

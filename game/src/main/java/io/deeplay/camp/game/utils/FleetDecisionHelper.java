@@ -11,7 +11,7 @@ public class FleetDecisionHelper {
     }
 
     public static boolean hasEnoughPoints(Player player) {
-        return player.getTotalGamePoints() >= 10;
+        return player.getTotalGamePoints() >= 20;
     }
 
     public static boolean isAvailablePosition(Cell startCell, String playerName) {

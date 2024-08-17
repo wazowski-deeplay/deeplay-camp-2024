@@ -1,6 +1,5 @@
 package io.deeplay.camp.game.entities;
 
-import io.deeplay.camp.game.interfaces.GalaxyListener;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.Move;
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
@@ -81,14 +80,14 @@ class GameTest {
         game.connectingPlayer("Player2");
         game.gameStarted(field);
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
         assertTrue(game.isGameOver());
         assertEquals("победитель не существует", game.isWinner());
@@ -105,17 +104,17 @@ class GameTest {
 
         new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
         assertFalse(game.isGameOver());
     }
@@ -131,26 +130,26 @@ class GameTest {
 
         new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[2][2], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[2][2], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[2][2], field.getBoard()[3][3], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[2][2], field.getBoard()[3][3], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
         assertFalse(game.isGameOver());
     }
@@ -167,35 +166,35 @@ class GameTest {
         new Fleet(field.getBoard()[0][0], game.getPlayerByName("Player2"));
         new Fleet(field.getBoard()[9][0], game.getPlayerByName("Player1"));
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][0], field.getBoard()[9][1], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][0], field.getBoard()[9][1], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[3][3], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[1][1], field.getBoard()[3][3], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][1], field.getBoard()[9][2], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][1], field.getBoard()[9][2], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[3][3], field.getBoard()[4][4], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][2], field.getBoard()[9][3], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][2], field.getBoard()[9][3], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[4][4], field.getBoard()[5][5], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][3], field.getBoard()[9][4], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][3], field.getBoard()[9][4], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[5][5], field.getBoard()[6][6], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][4], field.getBoard()[9][5], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[6][6], field.getBoard()[7][7], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][4], field.getBoard()[9][5], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[6][6], field.getBoard()[7][7], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][5], field.getBoard()[9][6], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[7][7], field.getBoard()[8][8], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][5], field.getBoard()[9][6], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[7][7], field.getBoard()[8][8], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][6], field.getBoard()[9][7], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(field.getBoard()[8][8], field.getBoard()[9][9], Move.MoveType.ORDINARY, 7), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][6], field.getBoard()[9][7], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(field.getBoard()[8][8], field.getBoard()[9][9], Move.MoveType.ORDINARY, new ArrayList<>(), 7), "Player2");
 
-        game.getPlayerAction(new Move(field.getBoard()[9][7], field.getBoard()[9][8], Move.MoveType.ORDINARY, 5), "Player1");
-        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player2");
+        game.getPlayerAction(new Move(field.getBoard()[9][7], field.getBoard()[9][8], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player1");
+        game.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player2");
 
         assertFalse(game.isGameOver());
     }
@@ -206,8 +205,8 @@ class GameTest {
         startShips.add(Ship.ShipType.BASIC);
         originalGame.createShips(startShips, originalGame.getPlayerByName("Player1").getName());
 
-        originalGame.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, 0), "Player1");
-        originalGame.getPlayerAction(new Move(field.getBoard()[0][9], field.getBoard()[1][9], Move.MoveType.ORDINARY, 5), "Player2");
+        originalGame.getPlayerAction(new Move(null, null, Move.MoveType.SKIP, null, 0), "Player1");
+        originalGame.getPlayerAction(new Move(field.getBoard()[0][9], field.getBoard()[1][9], Move.MoveType.ORDINARY, new ArrayList<>(), 5), "Player2");
 
         copiedGame = new Game(originalGame);
 
@@ -259,16 +258,17 @@ class GameTest {
     public void testCopyConstructorComplexState() {
         Fleet originalFleet1 = new Fleet(field.getBoard()[0][0], originalGame.getPlayerByName("Player1"));
         Fleet originalFleet2 = new Fleet(field.getBoard()[9][9], originalGame.getPlayerByName("Player2"));
-
-        originalGame.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7), "Player1");
-        originalGame.getPlayerAction(new Move(field.getBoard()[9][9], field.getBoard()[8][8], Move.MoveType.ORDINARY, 7), "Player2");
+        List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship(Ship.ShipType.BASIC, originalFleet1));
+        originalGame.getPlayerAction(new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, ships, 8), "Player1");
+        originalGame.getPlayerAction(new Move(field.getBoard()[9][9], field.getBoard()[8][8], Move.MoveType.ORDINARY, ships, 8), "Player2");
 
         copiedGame = new Game(originalGame);
 
         Fleet copiedFleet1 = copiedGame.getField().getBoard()[1][1].getFleet();
-        ;
+
         Fleet copiedFleet2 = copiedGame.getField().getBoard()[8][8].getFleet();
-        ;
+
 
         assertNotNull(copiedFleet1, "Флот1 должен существовать в копии");
         assertNotNull(copiedFleet2, "Флот2 должен существовать в копии");

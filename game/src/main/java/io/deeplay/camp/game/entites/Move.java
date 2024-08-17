@@ -2,23 +2,34 @@ package io.deeplay.camp.game.entites;
 
 import io.deeplay.camp.game.utils.ValidationMove;
 
+import java.util.List;
+
 /**
  * Класс - ход, как record,
  * чтоб не закладывать, еще не продуманную, логику.
  * Record обеспечивает из коробки все требуемые методы (и даже больше)
  */
-public record Move(Cell startPosition, Cell endPosition, MoveType moveType, int cost) {
+public record Move(Cell startPosition, Cell endPosition, MoveType moveType, List<Ship> shipList, int cost) {
     // точка входа для хода
     public void makeMove(final Player player) {
         Fleet fleet = startPosition.getFleet();
         Fleet enemyFleet = endPosition.getFleet();
+        List<Ship> removeShips = null;
+
+        if (shipList.size() != fleet.getShipList().size()) {
+            removeShips = fleet.updateFleet(shipList);
+        }
 
         if (enemyFleet != null) {
             handleEnemyFleetEncounter(player, fleet, enemyFleet);
         } else {
             moveFleetToPosition(fleet, endPosition);
         }
+
         checkAndCapturePlanet(player);
+
+        if (removeShips != null)
+            startPosition.setFleet(new Fleet(removeShips, startPosition, player));
     }
 
     // на конечной позиции есть флот

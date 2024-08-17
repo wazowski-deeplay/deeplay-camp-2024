@@ -155,7 +155,6 @@ class FleetTest {
 
     }
 
-    //todo посмотреть что с переопределением хэшкода сейчас StackOverflow хотя Objects.hash должен исключать такое(?)
     @Test
     public void testEqualsAndHashCode() {
         Fleet differentFleet = new Fleet(new ArrayList<>(), new Cell(6, 6), enemy);
@@ -185,10 +184,13 @@ class FleetTest {
     void testAddFleetMovesValidMoves() {
         Field field = new Field(5, new SymmetricalGenerator());
         Fleet currentFleet = new Fleet(field.getBoard()[2][2], player);
+        List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship(Ship.ShipType.BASIC, currentFleet));
+        Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[1][1], Move.MoveType.ORDINARY, ships, 8);
+        Move move2 = new Move(field.getBoard()[2][2], field.getBoard()[2][1], Move.MoveType.ORDINARY, ships, 6);
+        Move move3 = new Move(field.getBoard()[2][2], field.getBoard()[0][0], Move.MoveType.ORDINARY, ships, 16);
         currentFleet.addFleetMoves(field);
-        Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[1][1], Move.MoveType.ORDINARY, 7);
-        Move move2 = new Move(field.getBoard()[2][2], field.getBoard()[2][1], Move.MoveType.ORDINARY, 5);
-        Move move3 = new Move(field.getBoard()[2][2], field.getBoard()[0][0], Move.MoveType.ORDINARY, 14);
+
         assertTrue(currentFleet.getFleetMoves().contains(move1));
         assertTrue(currentFleet.getFleetMoves().contains(move2));
         assertTrue(currentFleet.getFleetMoves().contains(move3));
@@ -198,10 +200,30 @@ class FleetTest {
     void testAddFleetMovesInvalidMoves() {
         Field field = new Field(20, new SymmetricalGenerator());
         Fleet currentFleet = new Fleet(field.getBoard()[2][2], player);
+        List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship(Ship.ShipType.BASIC, currentFleet));
+        Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[10][10], Move.MoveType.ORDINARY, ships, 64); // уже не хватает очков для хода
+        Move move2 = new Move(field.getBoard()[2][2], field.getBoard()[8][8], Move.MoveType.ORDINARY, ships, 48);
         currentFleet.addFleetMoves(field);
-        Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[9][10], Move.MoveType.ORDINARY, 64); // уже не хватает очков для хода
-        Move move2 = new Move(field.getBoard()[2][2], field.getBoard()[9][9], Move.MoveType.ORDINARY, 49);
         assertFalse(currentFleet.getFleetMoves().contains(move1));
+        assertTrue(currentFleet.getFleetMoves().contains(move2));
+    }
+
+    @Test
+    void testAddFleetMovesMoves() {
+        Field field = new Field(20, new SymmetricalGenerator());
+        Fleet currentFleet = new Fleet(field.getBoard()[2][2], player);
+        List<Ship> ships1 = new ArrayList<>();
+        Ship ship1 = new Ship(Ship.ShipType.BASIC, currentFleet);
+        Ship ship2 = new Ship(Ship.ShipType.MEDIUM, currentFleet);
+        ships1.add(ship1);
+        ships1.add(ship2);
+        Move move1 = new Move(field.getBoard()[2][2], field.getBoard()[3][3], Move.MoveType.ORDINARY, ships1, 9);
+        currentFleet.addFleetMoves(field);
+        assertTrue(currentFleet.getFleetMoves().contains(move1));
+        List<Ship> ships2 = new ArrayList<>();
+        ships2.add(ship1);
+        Move move2 = new Move(field.getBoard()[2][2], field.getBoard()[3][3], Move.MoveType.ORDINARY, ships2, 8);
         assertTrue(currentFleet.getFleetMoves().contains(move2));
     }
 
@@ -248,7 +270,7 @@ class FleetTest {
     }
 
     @Test
-    void testCopiedFleetHaveOtherOwner(){
+    void testCopiedFleetHaveOtherOwner() {
         Player copyPlayer = new Player(player);
         Fleet newFleet = new Fleet(new Cell(1, 1), player);
 

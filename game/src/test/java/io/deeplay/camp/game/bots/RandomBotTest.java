@@ -35,9 +35,9 @@ public class RandomBotTest {
 
     @Test
     public void testGetMove() {
-        Move move1 = new Move(field.getBoard()[0][0], field.getBoard()[0][1], Move.MoveType.ORDINARY, DIRECT_COST + 1);
-        Move move2 = new Move(field.getBoard()[0][0], field.getBoard()[1][0], Move.MoveType.ORDINARY, DIRECT_COST + 1);
-        Move move3 = new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, DIAGONAL_COST + 1);
+        Move move1 = new Move(field.getBoard()[0][0], field.getBoard()[0][1], Move.MoveType.ORDINARY, new ArrayList<>(), DIRECT_COST + 1);
+        Move move2 = new Move(field.getBoard()[0][0], field.getBoard()[1][0], Move.MoveType.ORDINARY, new ArrayList<>(), DIRECT_COST + 1);
+        Move move3 = new Move(field.getBoard()[0][0], field.getBoard()[1][1], Move.MoveType.ORDINARY, new ArrayList<>(), DIAGONAL_COST + 1);
 
         List<Move> moves = new ArrayList<>();
         moves.add(move1);

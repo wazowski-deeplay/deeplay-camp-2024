@@ -20,10 +20,9 @@ public class RandomBot extends Bot {
         final Player player = game.getPlayerByName(name);
 
         availableMoves = game.availableMoves(name);
-        availableMoves.removeIf(move -> PointsCalculator.costMovement(move.startPosition(), move.endPosition()) > player.getTotalGamePoints());
 
         if (availableMoves.isEmpty()) {
-            return new Move(null, null, Move.MoveType.SKIP, 0);
+            return new Move(null, null, Move.MoveType.SKIP, null, 0);
         }
 
         return availableMoves.get(random.nextInt(availableMoves.size()));
@@ -35,20 +34,20 @@ public class RandomBot extends Bot {
         final Player player = game.getPlayerByName(name);
         Ship.ShipType[] availableShipTypes = Ship.ShipType.values();
         int remainingPoints = player.getTotalGamePoints();
-        int maxShipsToBuy = random.nextInt(remainingPoints / 10) + 1;
+        int maxShipsToBuy = random.nextInt(remainingPoints / 20) + 1;
         int shipsPurchased = 0;
 
         while (shipsPurchased < maxShipsToBuy) {
             int randomIndex = random.nextInt(availableShipTypes.length);
             Ship.ShipType selectedShipType = availableShipTypes[randomIndex];
-            int shipCost = selectedShipType.getShipPower() / 10;
+            int shipCost = selectedShipType.getShipPower() / 5;
 
             if (remainingPoints >= shipCost) {
                 purchasedShips.add(selectedShipType);
                 remainingPoints -= shipCost;
                 shipsPurchased++;
             }
-            if (remainingPoints < 10 || (shipsPurchased > 0 && random.nextInt(10) < 2)) {
+            if (remainingPoints < 20 || (shipsPurchased > 0 && random.nextInt(10) < 2)) {
                 break;
             }
         }
@@ -68,10 +67,10 @@ public class RandomBot extends Bot {
         Player player = game.getPlayerByName(name);
         Cell startCell = game.getPlayerStartPosition().get(name);
 
-        if (FleetDecisionHelper.shouldBuyFleet(startCell, player)){
+        if (FleetDecisionHelper.shouldBuyFleet(startCell, player)) {
             return new Answer(buyFleets());
-    } else {
-        return new Answer(getMove());
-    }
+        } else {
+            return new Answer(getMove());
+        }
     }
 }
