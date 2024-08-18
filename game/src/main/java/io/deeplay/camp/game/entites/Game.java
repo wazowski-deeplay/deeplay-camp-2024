@@ -45,6 +45,12 @@ public class Game implements GalaxyListener {
             this.playerNames.put(entry.getKey(), new Player(entry.getValue()));
         }
 
+        for (Planet planet : other.field.getPlanets()) {
+            if (planet.getOwner() != null) {
+                this.field.getBoard()[planet.getCell().x][planet.getCell().y].planet.setOwner(playerNames.get(planet.getOwner().getName()));
+            }
+        }
+
         // Глубокое копирование начальных позиций игроков
         this.playerStartPosition = new HashMap<>();
         for (Map.Entry<String, Cell> entry : other.playerStartPosition.entrySet()) {
@@ -69,7 +75,7 @@ public class Game implements GalaxyListener {
         this.consecutiveSkipCounts = Arrays.copyOf(other.consecutiveSkipCounts, other.consecutiveSkipCounts.length);
     }
 
-    public Game getCopy(Game originalGame){
+    public Game getCopy(Game originalGame) {
         return new Game(originalGame);
     }
 
