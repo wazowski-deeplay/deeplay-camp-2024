@@ -1,5 +1,6 @@
 package io.deeplay.camp.game.bots;
 
+import io.deeplay.camp.game.bots.RandomBot.RandomBot;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 import org.junit.jupiter.api.BeforeEach;

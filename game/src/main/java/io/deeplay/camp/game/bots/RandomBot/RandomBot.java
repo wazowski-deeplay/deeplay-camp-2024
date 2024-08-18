@@ -1,5 +1,6 @@
-package io.deeplay.camp.game.bots;
+package io.deeplay.camp.game.bots.RandomBot;
 
+import io.deeplay.camp.game.bots.Bot;
 import io.deeplay.camp.game.entites.*;
 import io.deeplay.camp.game.utils.FleetDecisionHelper;
 import io.deeplay.camp.game.utils.PointsCalculator;

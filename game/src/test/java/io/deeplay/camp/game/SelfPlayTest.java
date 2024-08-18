@@ -1,7 +1,7 @@
 package io.deeplay.camp.game;
 
 import io.deeplay.camp.game.bots.Bot;
-import io.deeplay.camp.game.bots.RandomBot;
+import io.deeplay.camp.game.bots.RandomBot.RandomBot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
