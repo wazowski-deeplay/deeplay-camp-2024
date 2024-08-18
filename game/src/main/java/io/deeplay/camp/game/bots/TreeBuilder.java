@@ -1,22 +1,44 @@
 package io.deeplay.camp.game.bots;
 
-import io.deeplay.camp.game.entites.Field;
 import io.deeplay.camp.game.entites.Game;
 import io.deeplay.camp.game.entites.Move;
-import io.deeplay.camp.game.entites.Ship;
-import io.deeplay.camp.game.entites.boardGenerator.SymmetricalGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class TreeBuilder {
-    static class Stats {
-        int numNodes;
-        int numTerminalNodes;
-        int maxDepth;
-        double branchingFactor;
-        long workTimeMS;
+    /**
+     * Класс {@code Stats} хранит различные статистические данные,
+     * связанные с исследованием структуры дерева.
+     */
+    static public class Stats {
+        /**
+         * Общее количество узлов в дереве.
+         */
+        public int numNodes;
+        /**
+         * Количество терминальных узлов (листов) в дереве.
+         */
+        public int numTerminalNodes;
+        /**
+         * Максимальная глубина дерева.
+         */
+        public int maxDepth;
+        /**
+         * Средний коэффициент ветвления дерева, который представляет
+         * собой среднее количество дочерних узлов на один узел.
+         */
+        public double branchingFactor;
+        /**
+         * Общее время, затраченное на операцию, измеренное в миллисекундах.
+         */
+        public long workTimeMS;
+        /**
+         * Возвращает строковое представление объекта {@code Stats},
+         * включающее все поля и их значения.
+         *
+         * @return строковое представление объекта.
+         */
         @Override
         public String toString() {
             return "Stats{" +
@@ -29,27 +51,44 @@ public class TreeBuilder {
         }
     }
 
-    static class DFSStats {
+    /**
+     * Класс {@code AuxiliaryStats} хранит дополнительные статистические данные,
+     * которые фиксируют разные игровые сценарии.
+     */
+    static class AuxiliaryStats {
+        /**
+         * Общее количество пройденных путей.
+         */
         int totalPaths = 0;
+        /**
+         * Общая длина всех путей.
+         */
         int totalLength = 0;
         int winsPlayer1 = 0;
         int winsPlayer2 = 0;
         int draws = 0;
     }
 
-    public static void dfs(Game game, int pathLength, DFSStats stats) {
-        // Проверка завершения игры
+    /**
+     * Рекурсивно строит дерево игры, начиная с текущего состояния игры, и обновляет статистику.
+     *
+     * @param game       текущее состояние игры.
+     * @param pathLength длина текущего пути.
+     * @param aStats     объект {@code AuxiliaryStats} для накопления статистики.
+     */
+    public static void recursiveTreeBuilder(Game game, int pathLength, AuxiliaryStats aStats) {
+
         if (game.isGameOver()) {
-            stats.totalPaths++;
-            stats.totalLength += pathLength;
+            aStats.totalPaths++;
+            aStats.totalLength += pathLength;
             String winner = game.isWinner();
 
             if (winner.equals("победитель не существует")) {
-                stats.draws++;
+                aStats.draws++;
             } else if (winner.equals(game.players[0].getName())) {
-                stats.winsPlayer1++;
+                aStats.winsPlayer1++;
             } else if (winner.equals(game.players[1].getName())) {
-                stats.winsPlayer2++;
+                aStats.winsPlayer2++;
             }
             return;
         }
@@ -62,45 +101,67 @@ public class TreeBuilder {
         for (Move move : availableMoves) {
             Game gameCopy = game.getCopy(game);
             gameCopy.getPlayerAction(move, currentPlayer);
-            dfs(gameCopy, pathLength + 1, stats);
+            recursiveTreeBuilder(gameCopy, pathLength + 1, aStats);
         }
     }
 
+    /**
+     * Строит полное дерево игры, начиная с корня, и возвращает статистику по дереву.
+     *
+     * @param root начальное состояние игры.
+     * @return объект {@code Stats} с собранной статистикой.
+     */
     public static Stats buildGameTree(final Game root) {
         Stats stats = new Stats();
-        DFSStats dfsStats = new DFSStats();
+        AuxiliaryStats aStats = new AuxiliaryStats();
 
         long startTime = System.currentTimeMillis();
-        dfs(root, 0, dfsStats);
+        recursiveTreeBuilder(root, 0, aStats);
         long endTime = System.currentTimeMillis();
 
-        stats.numNodes = dfsStats.totalPaths;
-        stats.numTerminalNodes = dfsStats.winsPlayer1 + dfsStats.winsPlayer2 + dfsStats.draws;
-        stats.maxDepth = dfsStats.totalLength / dfsStats.totalPaths; // средняя длина пути
-        stats.branchingFactor = (double) dfsStats.totalLength / dfsStats.totalPaths;
+        stats.numNodes = aStats.totalPaths;
+        stats.numTerminalNodes = aStats.winsPlayer1 + aStats.winsPlayer2 + aStats.draws;
+        stats.maxDepth = aStats.totalLength / aStats.totalPaths; // средняя длина пути
+        stats.branchingFactor = (double) aStats.totalLength / aStats.totalPaths;
         stats.workTimeMS = endTime - startTime;
 
         return stats;
     }
 
+    /**
+     * Строит дерево игры с ограничением по глубине и возвращает статистику по дереву.
+     *
+     * @param root     начальное состояние игры.
+     * @param maxDepth максимальная глубина, до которой следует строить дерево.
+     * @return объект {@code Stats} с собранной статистикой.
+     */
     public static Stats buildGameTree(final Game root, final int maxDepth) {
         Stats stats = new Stats();
-        DFSStats dfsStats = new DFSStats();
+        AuxiliaryStats aStats = new AuxiliaryStats();
 
         long startTime = System.currentTimeMillis();
-        dfsWithDepth(root, 0, dfsStats, maxDepth);
+        recursiveTreeBuilderWithDepth(root, 0, aStats, maxDepth);
         long endTime = System.currentTimeMillis();
 
-        stats.numNodes = dfsStats.totalPaths;
-        stats.numTerminalNodes = dfsStats.winsPlayer1 + dfsStats.winsPlayer2 + dfsStats.draws;
-        stats.maxDepth = dfsStats.totalLength / dfsStats.totalPaths; // средняя длина пути
-        stats.branchingFactor = (double) dfsStats.totalLength / dfsStats.totalPaths;
+        stats.numNodes = aStats.totalPaths;
+        stats.numTerminalNodes = aStats.winsPlayer1 + aStats.winsPlayer2 + aStats.draws;
+        stats.maxDepth = aStats.totalLength / aStats.totalPaths; // средняя длина пути
+        stats.branchingFactor = (double) aStats.totalLength / aStats.totalPaths;
         stats.workTimeMS = endTime - startTime;
 
         return stats;
     }
 
-    private static void dfsWithDepth(Game game, int pathLength, DFSStats stats, int maxDepth) {
+    /**
+     * Рекурсивно строит дерево игры с ограничением по глубине, начиная с текущего состояния игры,
+     * и обновляет статистику.
+     *
+     * @param game      текущее состояние игры.
+     * @param pathLength длина текущего пути.
+     * @param stats     объект {@code AuxiliaryStats} для накопления статистики.
+     * @param maxDepth  максимальная глубина рекурсии.
+     */
+    private static void recursiveTreeBuilderWithDepth(Game game, int pathLength, AuxiliaryStats stats, int maxDepth) {
         if (pathLength >= maxDepth || game.isGameOver()) {
             stats.totalPaths++;
             stats.totalLength += pathLength;
@@ -122,7 +183,7 @@ public class TreeBuilder {
         for (Move move : availableMoves) {
             Game gameCopy = game.getCopy(game);
             gameCopy.getPlayerAction(move, currentPlayer);
-            dfsWithDepth(gameCopy, pathLength + 1, stats, maxDepth);
+            recursiveTreeBuilderWithDepth(gameCopy, pathLength + 1, stats, maxDepth);
         }
     }
 }

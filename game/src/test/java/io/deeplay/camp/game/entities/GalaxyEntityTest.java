@@ -1,5 +1,6 @@
-package io.deeplay.camp.game.entites;
+package io.deeplay.camp.game.entities;
 
+import io.deeplay.camp.game.entites.GalaxyEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
