@@ -199,6 +199,7 @@ class GameTest {
 
         assertFalse(game.isGameOver());
     }
+
     @Test
     public void testCopyConstructorPreservesState() {
         List<Ship.ShipType> startShips = new ArrayList<>();
@@ -250,7 +251,8 @@ class GameTest {
         Fleet copiedFleet = copiedGame.getField().getBoard()[0][0].getFleet();
         assertNotNull(copiedFleet, "Флот должен существовать в копии");
         assertNotSame(originalFleet, copiedFleet, "Флотилии должны быть разными объектами");
-        assertEquals(originalFleet.getFleetPosition(), copiedFleet.getFleetPosition(), "Позиция флота должна совпадать");
+        assertEquals(originalFleet.getFleetPosition().x, copiedFleet.getFleetPosition().x, "Позиция флота должна совпадать");
+        assertEquals(originalFleet.getFleetPosition().y, copiedFleet.getFleetPosition().y, "Позиция флота должна совпадать");
     }
 
     @Test
@@ -263,8 +265,10 @@ class GameTest {
 
         copiedGame = new Game(originalGame);
 
-        Fleet copiedFleet1 = copiedGame.getField().getBoard()[1][1].getFleet();;
-        Fleet copiedFleet2 = copiedGame.getField().getBoard()[8][8].getFleet();;
+        Fleet copiedFleet1 = copiedGame.getField().getBoard()[1][1].getFleet();
+        ;
+        Fleet copiedFleet2 = copiedGame.getField().getBoard()[8][8].getFleet();
+        ;
 
         assertNotNull(copiedFleet1, "Флот1 должен существовать в копии");
         assertNotNull(copiedFleet2, "Флот2 должен существовать в копии");
