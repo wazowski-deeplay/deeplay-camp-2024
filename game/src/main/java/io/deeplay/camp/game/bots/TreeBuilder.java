@@ -59,14 +59,14 @@ public class TreeBuilder {
         /**
          * Общее количество пройденных путей.
          */
-        int totalPaths = 0;
+        int totalPaths;
         /**
          * Общая длина всех путей.
          */
-        int totalLength = 0;
-        int winsPlayer1 = 0;
-        int winsPlayer2 = 0;
-        int draws = 0;
+        int totalLength;
+        int winsPlayer1;
+        int winsPlayer2;
+        int draws;
     }
 
     /**
@@ -78,7 +78,7 @@ public class TreeBuilder {
      */
     public static void recursiveTreeBuilder(Game game, int pathLength, AuxiliaryStats aStats) {
 
-        if (game.isGameOver()) {
+        if (game.isGameOver() /*|| game.availableMoves(game.players[0].getName()).isEmpty() || game.availableMoves(game.players[1].getName()).isEmpty()*/) {
             aStats.totalPaths++;
             aStats.totalLength += pathLength;
             String winner = game.isWinner();
@@ -101,6 +101,7 @@ public class TreeBuilder {
         for (Move move : availableMoves) {
             Game gameCopy = game.getCopy(game);
             gameCopy.getPlayerAction(move, currentPlayer);
+            //todo корректно считать pathLength
             recursiveTreeBuilder(gameCopy, pathLength + 1, aStats);
         }
     }

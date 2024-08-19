@@ -69,11 +69,12 @@ class TreeBuilderTest {
             @Override
             public List<Move> availableMoves(String player) {
                 moveCount++;
-                return moveCount < 3 ? List.of(new Move(null, null, Move.MoveType.SKIP, 0)) : List.of();
+                return List.of(new Move(null, null, Move.MoveType.SKIP, 0)); // возвращаем один ход
             }
 
             @Override
             public Game getCopy(Game originalGame) {
+                // Возвращаем новый объект Game, чтобы избежать мутаций
                 return this;
             }
         };
