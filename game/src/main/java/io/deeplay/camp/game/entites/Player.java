@@ -34,11 +34,7 @@ public class Player {
         this.name = other.name;
         this.totalGamePoints = other.totalGamePoints;
 
-        // Глубокое копирование fleetList
         this.fleetList = new ArrayList<>();
-        for (Fleet fleet : other.fleetList) {
-            this.fleetList.add(new Fleet(fleet));
-        }
 
         // Глубокое копирование controlledPlanet
         this.controlledPlanet = new ArrayList<>();

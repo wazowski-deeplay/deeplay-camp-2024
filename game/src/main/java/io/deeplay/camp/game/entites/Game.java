@@ -41,9 +41,10 @@ public class Game implements GalaxyListener {
 
         // Глубокое копирование имен игроков
         this.playerNames = new HashMap<>();
-        for (Map.Entry<String, Player> entry : other.playerNames.entrySet()) {
-            this.playerNames.put(entry.getKey(), new Player(entry.getValue()));
-        }
+
+        playerNames.put(players[0].getName(), players[0]);
+        playerNames.put(players[1].getName(), players[1]);
+
 
         for (Planet planet : other.field.getPlanets()) {
             if (planet.getOwner() != null) {
@@ -62,7 +63,12 @@ public class Game implements GalaxyListener {
                 Cell originalCell = other.field.getBoard()[x][y];
                 Cell copiedCell = this.field.getBoard()[x][y];
                 if (originalCell.getFleet() != null) {
-                    copiedCell.setFleet(new Fleet(originalCell.getFleet()));
+                    Fleet oldFleet = originalCell.getFleet();
+                    List<Ship> ships = new ArrayList<>();
+                    Fleet fleet = new Fleet(ships, copiedCell, playerNames.get(oldFleet.getOwner().getName()));
+                    for (Ship oldShip : oldFleet.getShipList()) {
+                        Ship ship = new Ship(oldShip.getShipType(), fleet);
+                    }
                 }
             }
         }
@@ -75,8 +81,8 @@ public class Game implements GalaxyListener {
         this.consecutiveSkipCounts = Arrays.copyOf(other.consecutiveSkipCounts, other.consecutiveSkipCounts.length);
     }
 
-    public Game getCopy(Game originalGame) {
-        return new Game(originalGame);
+    public Game getCopy() {
+        return new Game(this);
     }
 
     public String getId() {

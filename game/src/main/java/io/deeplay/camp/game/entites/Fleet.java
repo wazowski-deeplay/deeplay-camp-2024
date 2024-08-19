@@ -42,6 +42,7 @@ public class Fleet extends GalaxyEntity {
             ship.setFleetAffiliation(this);
         }
         this.fleetPosition = fleetPosition;
+        this.fleetMoves = new ArrayList<>();
         updateFleetPower();
         owner = player;
         owner.addFleet(this);
