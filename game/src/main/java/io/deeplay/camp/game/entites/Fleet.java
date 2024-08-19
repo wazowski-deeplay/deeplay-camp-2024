@@ -213,6 +213,7 @@ public class Fleet extends GalaxyEntity {
         for (int i = 0; i < fleetMoves.size(); i++) {
             Move currentMove = fleetMoves.get(i);
             findNeighbors(currentMove.endPosition(), visited, field);
+
             if (!ValidationMove.isEnoughPoints(getOwner(), currentMove) || fleetMoves.size() >= field.getSize() * field.getSize() - 1)
                 break;
         }
@@ -245,7 +246,8 @@ public class Fleet extends GalaxyEntity {
                 fleetMoves.add(new Move(fleetPosition, cell, Move.MoveType.ORDINARY, shipList, PointsCalculator.costMovement(fleetPosition, cell, shipList)));
             }
         } else {
-            Set<List<Ship>> combinations = generateUniqueShipCombinations(shipList);
+            Set<Integer> uniquePowers = new HashSet<>();
+            Set<List<Ship>> combinations = generateUniqueShipCombinations(shipList, uniquePowers);
 
             for (List<Ship> combination : combinations) {
                 if (owner.getTotalGamePoints() > PointsCalculator.costMovement(fleetPosition, cell, combination)) {
@@ -256,24 +258,27 @@ public class Fleet extends GalaxyEntity {
         }
     }
 
-private Set<List<Ship>> generateUniqueShipCombinations(List<Ship> ships) {
-    Set<List<Ship>> result = new HashSet<>();
-    int n = ships.size();
+    private Set<List<Ship>> generateUniqueShipCombinations(List<Ship> ships, Set<Integer> uniquePowers) {
+        Set<List<Ship>> result = new HashSet<>();
+        int n = ships.size();
 
-    for (int i = 1; i < (1 << n); i++) {
-        List<Ship> combination = new ArrayList<>();
-        for (int j = 0; j < n; j++) {
-            if ((i & (1 << j)) != 0) {
-                combination.add(ships.get(j));
+        for (int i = 1; i < (1 << n); i++) {
+            List<Ship> combination = new ArrayList<>();
+            int powerSum = 0;
+
+            for (int j = 0; j < n; j++) {
+                if ((i & (1 << j)) != 0) {
+                    combination.add(ships.get(j));
+                    powerSum += ships.get(j).getShipType().getShipPower();
+                }
+            }
+
+            if (!combination.isEmpty() && uniquePowers.add(powerSum)) {
+                result.add(combination);
             }
         }
-        if (!combination.isEmpty()) {
-            result.add(combination);
-        }
+        return result;
     }
-
-    return result;
-}
 
     public Player getOwner() {
         return owner;

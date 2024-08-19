@@ -101,8 +101,8 @@ class BotTest {
 
         game.createShips(startShips, player.getName());
         game.createShips(startShips, player2.getName());
-        player.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 10);
-        player2.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 10);
+        player.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 5);
+        player2.decreaseTotalGamePoints(startShips.get(0).getShipPower() / 5);
 
         final Answer answer = bot.getAnswer(game.getField());
 

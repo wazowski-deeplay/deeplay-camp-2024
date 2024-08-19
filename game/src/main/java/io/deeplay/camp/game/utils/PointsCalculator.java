@@ -32,13 +32,15 @@ public final class PointsCalculator {
     private static int calculateTotalCost(int direct, int diagonal) {
         return direct * DIRECT_COST + diagonal * DIAGONAL_COST;
     }
-
-    public static int costWeightFleet(List<Ship> shipList) {
-        int fleetPower = 0;
-        for (Ship ship : shipList) {
-            fleetPower += ship.getShipType().getShipPower();
+    public static int calculateFleetPower(List<Ship> ships) {
+        int totalPower = 0;
+        for (Ship ship : ships) {
+            totalPower += ship.getShipType().getShipPower();
         }
-        return (int) Math.floor(fleetPower / 100.0);
+        return totalPower;
+    }
+    public static int costWeightFleet(List<Ship> shipList) {
+        return (int) Math.floor(calculateFleetPower(shipList) / 100.0);
     }
 
     public static boolean checkAddCredits(long moveCounter) {
