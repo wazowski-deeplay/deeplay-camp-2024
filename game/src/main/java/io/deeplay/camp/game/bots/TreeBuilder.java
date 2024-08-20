@@ -56,17 +56,15 @@ public class TreeBuilder {
      * которые фиксируют разные игровые сценарии.
      */
     static class AuxiliaryStats {
-        /**
-         * Общее количество пройденных путей.
-         */
         int totalPaths;
-        /**
-         * Общая длина всех путей.
-         */
         int totalLength;
         int winsPlayer1;
         int winsPlayer2;
         int draws;
+        int numNodes;  // Счетчик всех узлов
+        int totalChildren;  // Общее количество дочерних узлов
+        int numParents;  // Количество узлов, имеющих дочерние узлы
+        int maxDepth;  // Максимальная глубина
     }
 
     /**
@@ -78,9 +76,12 @@ public class TreeBuilder {
      */
     public static void recursiveTreeBuilder(Game game, int pathLength, AuxiliaryStats aStats) {
 
-        if (game.isGameOver() /*|| game.availableMoves(game.players[0].getName()).isEmpty() || game.availableMoves(game.players[1].getName()).isEmpty()*/) {
+        aStats.numNodes++;  // Увеличиваем количество узлов
+
+        if (game.isGameOver()) {
             aStats.totalPaths++;
             aStats.totalLength += pathLength;
+            aStats.maxDepth = Math.max(aStats.maxDepth, pathLength);  // Обновляем максимальную глубину
             String winner = game.isWinner();
 
             if (winner.equals("победитель не существует")) {
@@ -93,15 +94,17 @@ public class TreeBuilder {
             return;
         }
 
-        // Получение списка возможных ходов для текущего игрока
         String currentPlayer = game.getNextPlayerToAct();
         List<Move> availableMoves = game.availableMoves(currentPlayer);
 
-        // Рекурсивный вызов для каждого возможного хода
+        if (!availableMoves.isEmpty()) {
+            aStats.numParents++;  // Увеличиваем количество узлов-родителей
+            aStats.totalChildren += availableMoves.size();  // Добавляем количество детей
+        }
+
         for (Move move : availableMoves) {
-            Game gameCopy = game.getCopy(game);
+            Game gameCopy = game.getCopy();
             gameCopy.getPlayerAction(move, currentPlayer);
-            //todo корректно считать pathLength
             recursiveTreeBuilder(gameCopy, pathLength + 1, aStats);
         }
     }
@@ -120,10 +123,10 @@ public class TreeBuilder {
         recursiveTreeBuilder(root, 0, aStats);
         long endTime = System.currentTimeMillis();
 
-        stats.numNodes = aStats.totalPaths;
-        stats.numTerminalNodes = aStats.winsPlayer1 + aStats.winsPlayer2 + aStats.draws;
-        stats.maxDepth = aStats.totalLength / aStats.totalPaths; // средняя длина пути
-        stats.branchingFactor = (double) aStats.totalLength / aStats.totalPaths;
+        stats.numNodes = aStats.numNodes;
+        stats.numTerminalNodes = aStats.totalPaths;
+        stats.maxDepth = aStats.maxDepth;
+        stats.branchingFactor = aStats.numParents == 0 ? 0 : (double) aStats.totalChildren / aStats.numParents;
         stats.workTimeMS = endTime - startTime;
 
         return stats;
@@ -144,10 +147,10 @@ public class TreeBuilder {
         recursiveTreeBuilderWithDepth(root, 0, aStats, maxDepth);
         long endTime = System.currentTimeMillis();
 
-        stats.numNodes = aStats.totalPaths;
-        stats.numTerminalNodes = aStats.winsPlayer1 + aStats.winsPlayer2 + aStats.draws;
-        stats.maxDepth = aStats.totalLength / aStats.totalPaths; // средняя длина пути
-        stats.branchingFactor = (double) aStats.totalLength / aStats.totalPaths;
+        stats.numNodes = aStats.numNodes;
+        stats.numTerminalNodes = aStats.totalPaths;
+        stats.maxDepth = aStats.maxDepth;
+        stats.branchingFactor = aStats.numParents == 0 ? 0 : (double) aStats.totalChildren / aStats.numParents;
         stats.workTimeMS = endTime - startTime;
 
         return stats;
@@ -163,9 +166,13 @@ public class TreeBuilder {
      * @param maxDepth  максимальная глубина рекурсии.
      */
     private static void recursiveTreeBuilderWithDepth(Game game, int pathLength, AuxiliaryStats stats, int maxDepth) {
+        stats.numNodes++;  // Увеличиваем количество узлов
+
+        // Если достигнута максимальная глубина или игра окончена
         if (pathLength >= maxDepth || game.isGameOver()) {
             stats.totalPaths++;
             stats.totalLength += pathLength;
+            stats.maxDepth = Math.max(stats.maxDepth, pathLength);  // Обновляем максимальную глубину
             String winner = game.isWinner();
 
             if (winner.equals("победитель не существует")) {
@@ -181,11 +188,16 @@ public class TreeBuilder {
         String currentPlayer = game.getNextPlayerToAct();
         List<Move> availableMoves = game.availableMoves(currentPlayer);
 
+        if (!availableMoves.isEmpty()) {
+            stats.numParents++;  // Увеличиваем количество узлов-родителей
+            stats.totalChildren += availableMoves.size();  // Добавляем количество детей
+        }
+
+        // Рекурсивно обходим все возможные ходы
         for (Move move : availableMoves) {
-            Game gameCopy = game.getCopy(game);
+            Game gameCopy = game.getCopy();
             gameCopy.getPlayerAction(move, currentPlayer);
             recursiveTreeBuilderWithDepth(gameCopy, pathLength + 1, stats, maxDepth);
         }
     }
 }
-
