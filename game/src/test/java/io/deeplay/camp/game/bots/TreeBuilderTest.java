@@ -163,4 +163,101 @@ class TreeBuilderTest {
                 () -> assertEquals(1.0, stats.branchingFactor, "Коэффициент ветвления должен быть 1.0")
         );
     }
+
+    @Test
+    public void testBuildGameTree0() {
+        // Создание игрового поля и начальной конфигурации
+        Field field = new Field(3, new SymmetricalGenerator());
+        Game game = new Game(field);
+
+        // Инициализация игроков
+        game.startGameSession("0000");
+        game.connectingPlayer("Игрок 1");
+        game.connectingPlayer("Игрок 2");
+        game.gameStarted(field);
+
+
+        // Проверяем, что игра не закончена
+        assertFalse(game.isGameOver(), "Игра должна продолжаться");
+
+        // Строим дерево игры и получаем статистику
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(game);
+
+        // Проверяем статистику
+        assertNotNull(stats);
+        assertTrue(stats.numNodes > 0, "Количество узлов должно быть больше 0");
+        assertTrue(stats.numTerminalNodes >= 0, "Количество терминальных узлов должно быть неотрицательным");
+        assertTrue(stats.maxDepth >= 0, "Максимальная глубина должна быть неотрицательной");
+        assertTrue(stats.branchingFactor >= 0, "Коэффициент ветвления должен быть неотрицательным");
+        assertTrue(stats.workTimeMS >= 0, "Время работы должно быть неотрицательным");
+
+        System.out.println(stats.toString());
+    }
+    @Test
+    public void testBuildGameTree1() {
+        // Создание игрового поля и начальной конфигурации
+        Field field = new Field(3, new SymmetricalGenerator());
+        Game game = new Game(field);
+
+        // Инициализация игроков
+        game.startGameSession("0000");
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        List<Ship.ShipType> startShips = new ArrayList<>();
+        startShips.add(Ship.ShipType.BASIC);
+        game.createShips(startShips, game.getPlayerByName("Player1").getName());
+        game.createShips(startShips, game.getPlayerByName("Player2").getName());
+
+        // Проверяем, что игра не закончена
+        assertFalse(game.isGameOver(), "Игра должна продолжаться");
+
+        // Строим дерево игры и получаем статистику
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(game);
+
+        // Проверяем статистику
+        assertNotNull(stats);
+        assertTrue(stats.numNodes > 0, "Количество узлов должно быть больше 0");
+        assertTrue(stats.numTerminalNodes >= 0, "Количество терминальных узлов должно быть неотрицательным");
+        assertTrue(stats.maxDepth >= 0, "Максимальная глубина должна быть неотрицательной");
+        assertTrue(stats.branchingFactor >= 0, "Коэффициент ветвления должен быть неотрицательным");
+        assertTrue(stats.workTimeMS >= 0, "Время работы должно быть неотрицательным");
+
+        System.out.println(stats.toString());
+    }
+
+    /*@Test
+    public void testBuildGameTree2() {
+        // Создание игрового поля и начальной конфигурации
+        Field field = new Field(5, new SymmetricalGenerator());
+        Game game = new Game(field);
+
+        // Инициализация игроков
+        game.startGameSession("0000");
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        List<Ship.ShipType> startShips = new ArrayList<>();
+        startShips.add(Ship.ShipType.BASIC);
+        game.createShips(startShips, game.getPlayerByName("Player1").getName());
+        game.createShips(startShips, game.getPlayerByName("Player2").getName());
+
+        // Проверяем, что игра не закончена
+        assertFalse(game.isGameOver(), "Игра должна продолжаться");
+
+        // Строим дерево игры и получаем статистику
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(game);
+
+        // Проверяем статистику
+        assertNotNull(stats);
+        assertTrue(stats.numNodes > 0, "Количество узлов должно быть больше 0");
+        assertTrue(stats.numTerminalNodes >= 0, "Количество терминальных узлов должно быть неотрицательным");
+        assertTrue(stats.maxDepth >= 0, "Максимальная глубина должна быть неотрицательной");
+        assertTrue(stats.branchingFactor >= 0, "Коэффициент ветвления должен быть неотрицательным");
+        assertTrue(stats.workTimeMS >= 0, "Время работы должно быть неотрицательным");
+
+        System.out.println(stats.toString());
+    }*/
 }
