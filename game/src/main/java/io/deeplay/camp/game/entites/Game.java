@@ -266,4 +266,24 @@ public class Game implements GalaxyListener {
     public Map<String, Cell> getPlayerStartPosition() {
         return playerStartPosition;
     }
+
+    /**
+     * Возвращает уникальный идентификатор текущего состояния игры.
+     *
+     * @return строка, представляющая уникальный идентификатор состояния.
+     */
+    public String getStateIdentifier() {
+        // Здесь вы можете использовать любые данные, которые делают состояние уникальным.
+        // Например, положение фигур на доске, текущий игрок и т. д.
+        List<String> identifiers = new ArrayList<>();
+        for(Move lm: this.availableMoves(this.getNextPlayerToAct())){
+            identifiers.add(lm.toString());
+        }
+
+        // Объединяем элементы списка в одну строку с разделителем ","
+        String movesString = String.join(",", identifiers);
+
+        // Возвращаем комбинацию строки ходов и текущего игрока
+        return movesString /*+ this.getNextPlayerToAct() + Arrays.toString(this.consecutiveSkipCounts) + this.skipException*/;
+    }
 }

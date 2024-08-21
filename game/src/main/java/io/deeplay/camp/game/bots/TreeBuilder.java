@@ -3,7 +3,10 @@ package io.deeplay.camp.game.bots;
 import io.deeplay.camp.game.entites.Game;
 import io.deeplay.camp.game.entites.Move;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class TreeBuilder {
@@ -69,13 +72,23 @@ public class TreeBuilder {
 
     /**
      * Рекурсивно строит дерево игры, начиная с текущего состояния игры, и обновляет статистику.
+     * Избегает повторного посещения состояний, которые уже были исследованы.
      *
      * @param game       текущее состояние игры.
      * @param pathLength длина текущего пути.
      * @param aStats     объект {@code AuxiliaryStats} для накопления статистики.
+     * @param visitedStates Множество уже посещенных состояний.
      */
-    public static void recursiveTreeBuilder(Game game, int pathLength, AuxiliaryStats aStats) {
+    public static void recursiveTreeBuilder(Game game, int pathLength, AuxiliaryStats aStats, Set<String> visitedStates) {
+        String currentState = game.getStateIdentifier(); // Получаем уникальный идентификатор состояния
 
+        // Если текущее состояние уже было посещено, прекращаем обработку
+        if (visitedStates.contains(currentState)) {
+            return;
+        }
+
+        // Добавляем текущее состояние в набор посещенных состояний
+        visitedStates.add(currentState);
         aStats.numNodes++;  // Увеличиваем количество узлов
 
         if (game.isGameOver()) {
@@ -105,7 +118,7 @@ public class TreeBuilder {
         for (Move move : availableMoves) {
             Game gameCopy = game.getCopy();
             gameCopy.getPlayerAction(move, currentPlayer);
-            recursiveTreeBuilder(gameCopy, pathLength + 1, aStats);
+            recursiveTreeBuilder(gameCopy, pathLength + 1, aStats, visitedStates);
         }
     }
 
@@ -118,9 +131,10 @@ public class TreeBuilder {
     public static Stats buildGameTree(final Game root) {
         Stats stats = new Stats();
         AuxiliaryStats aStats = new AuxiliaryStats();
+        Set<String> visitedStates = new HashSet<>(); // Множество для хранения посещенных состояний
 
         long startTime = System.currentTimeMillis();
-        recursiveTreeBuilder(root, 0, aStats);
+        recursiveTreeBuilder(root, 0, aStats, visitedStates);
         long endTime = System.currentTimeMillis();
 
         stats.numNodes = aStats.numNodes;
