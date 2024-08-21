@@ -273,17 +273,31 @@ public class Game implements GalaxyListener {
      * @return строка, представляющая уникальный идентификатор состояния.
      */
     public String getStateIdentifier() {
-        // Здесь вы можете использовать любые данные, которые делают состояние уникальным.
-        // Например, положение фигур на доске, текущий игрок и т. д.
-        List<String> identifiers = new ArrayList<>();
-        for(Move lm: this.availableMoves(this.getNextPlayerToAct())){
-            identifiers.add(lm.toString());
+        StringBuilder sb = new StringBuilder();
+
+        // Включаем идентификатор текущего игрока
+        sb.append("Player:").append(nextPlayerToAct).append(";");
+
+        // Включаем информацию о состоянии клеток и флотах
+        for (int x = 0; x < field.getSize(); x++) {
+            for (int y = 0; y < field.getSize(); y++) {
+                Cell cell = field.getBoard()[x][y];
+                if (cell.getPlanet() != null && cell.getPlanet().getOwner() != null) {
+                    sb.append("P").append(x).append(",").append(y).append(":")
+                            .append(cell.getPlanet().getOwner().getName()).append(";");
+                }
+                if (cell.getFleet() != null && cell.getFleet().getOwner() != null) {
+                    sb.append("F").append(x).append(",").append(y).append(":")
+                            .append(cell.getFleet().getOwner().getName()).append(";");
+                }
+            }
         }
 
-        // Объединяем элементы списка в одну строку с разделителем ","
-        String movesString = String.join(",", identifiers);
+        // Включаем счетчики пропусков и другие важные флаги
+        sb.append("Skips:").append(Arrays.toString(consecutiveSkipCounts)).append(";");
+        sb.append("SkipException:").append(skipException).append(";");
 
-        // Возвращаем комбинацию строки ходов и текущего игрока
-        return movesString /*+ this.getNextPlayerToAct() + Arrays.toString(this.consecutiveSkipCounts) + this.skipException*/;
+        // Получаем хэш строки для более компактного идентификатора
+        return String.valueOf(Objects.hash(sb.toString()));
     }
 }

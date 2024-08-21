@@ -385,7 +385,7 @@ class TreeBuilderTest {
     @Test
     public void testBuildGameTree5() {
         // Создание игрового поля и начальной конфигурации
-        Field field = new Field(5, new TreeBuilderGenerator());
+        Field field = new Field(3, new TreeBuilderGenerator());
         Game game = new Game(field);
 
         // Инициализация игроков
