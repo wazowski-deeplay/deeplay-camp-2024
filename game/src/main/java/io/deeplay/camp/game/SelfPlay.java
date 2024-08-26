@@ -63,8 +63,8 @@ public class SelfPlay implements GalaxyListener {
 
         List<Ship.ShipType> startShips = new ArrayList<>();
         startShips.add(Ship.ShipType.BASIC);
-//        startShips.add(Ship.ShipType.BASIC);
-//        startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
+        startShips.add(Ship.ShipType.BASIC);
 //        startShips.add(Ship.ShipType.BASIC);
 //        startShips.add(Ship.ShipType.BASIC);
 
@@ -100,7 +100,7 @@ public class SelfPlay implements GalaxyListener {
             CompletableFuture<Answer> future = CompletableFuture.supplyAsync(() -> player.getAnswer(game.getField()), executor);
 
             try {
-                answer = future.get(5, TimeUnit.SECONDS);
+                answer = future.get(10, TimeUnit.SECONDS);
             } catch (TimeoutException ex) {
                 if (nextPlayerToAct.equals(playerNames[0])) {
                     winner = playerNames[1];

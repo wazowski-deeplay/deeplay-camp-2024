@@ -93,6 +93,10 @@ public class Game implements GalaxyListener {
         return players[nextPlayerToAct].getName();
     }
 
+    public int getNextPlayerToActIndex() {
+        return nextPlayerToAct;
+    }
+
 
     public boolean isGameOver() {
         return checkConsecutiveSkips() || isCheckPlayer0Fail() || isCheckPlayer1Fail() || field.isGameOver();
