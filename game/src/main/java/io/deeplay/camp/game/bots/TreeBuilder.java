@@ -156,9 +156,10 @@ public class TreeBuilder {
     public static Stats buildGameTree(final Game root, final int maxDepth) {
         Stats stats = new Stats();
         AuxiliaryStats aStats = new AuxiliaryStats();
+        Set<String> visitedStates = new HashSet<>(); // Множество для хранения посещенных состояний
 
         long startTime = System.currentTimeMillis();
-        recursiveTreeBuilderWithDepth(root, 0, aStats, maxDepth);
+        recursiveTreeBuilderWithDepth(root, 0, aStats, maxDepth, visitedStates);
         long endTime = System.currentTimeMillis();
 
         stats.numNodes = aStats.numNodes;
@@ -178,8 +179,18 @@ public class TreeBuilder {
      * @param pathLength длина текущего пути.
      * @param stats     объект {@code AuxiliaryStats} для накопления статистики.
      * @param maxDepth  максимальная глубина рекурсии.
+     * @param visitedStates Множество уже посещенных состояний.
      */
-    private static void recursiveTreeBuilderWithDepth(Game game, int pathLength, AuxiliaryStats stats, int maxDepth) {
+    private static void recursiveTreeBuilderWithDepth(Game game, int pathLength, AuxiliaryStats stats, int maxDepth, Set<String> visitedStates) {
+        String currentState = game.getStateIdentifier(); // Получаем уникальный идентификатор состояния
+
+        // Если текущее состояние уже было посещено, прекращаем обработку
+        if (visitedStates.contains(currentState)) {
+            return;
+        }
+
+        // Добавляем текущее состояние в набор посещенных состояний
+        visitedStates.add(currentState);
         stats.numNodes++;  // Увеличиваем количество узлов
 
         // Если достигнута максимальная глубина или игра окончена
@@ -211,7 +222,7 @@ public class TreeBuilder {
         for (Move move : availableMoves) {
             Game gameCopy = game.getCopy();
             gameCopy.getPlayerAction(move, currentPlayer);
-            recursiveTreeBuilderWithDepth(gameCopy, pathLength + 1, stats, maxDepth);
+            recursiveTreeBuilderWithDepth(gameCopy, pathLength + 1, stats, maxDepth, visitedStates);
         }
     }
 }

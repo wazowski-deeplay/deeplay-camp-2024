@@ -415,4 +415,215 @@ class TreeBuilderTest {
 
         System.out.println(stats);
     }
+
+
+    @Test
+    void testBuildGameTreeWithLimitedDepth1() {
+        Game mockGame = new Game(new Field(5, new SymmetricalGenerator())) {
+            int moveCount = 0;
+            boolean moveExecuted = false;
+
+            @Override
+            public boolean isGameOver() {
+                return moveCount >= 5; // Игра заканчивается после 5-го хода
+            }
+
+            @Override
+            public String isWinner() {
+                return "победитель не существует";
+            }
+
+            @Override
+            public List<Move> availableMoves(String player) {
+                return List.of(new Move(null, null, Move.MoveType.SKIP, new ArrayList<>(), 0)); // Один ход
+            }
+
+            @Override
+            public void getPlayerAction(Move move, String player) {
+                if (!moveExecuted) {
+                    moveCount++;
+                    moveExecuted = true;
+                }
+            }
+
+            @Override
+            public Game getCopy() {
+                moveExecuted = false;
+                return this;
+            }
+
+            @Override
+            public String getStateIdentifier() {
+                return "state-" + moveCount;
+            }
+        };
+
+        // Настройка игры
+        mockGame.startGameSession("game-depth-1");
+        mockGame.connectingPlayer("Player1");
+        mockGame.connectingPlayer("Player2");
+        mockGame.gameStarted(mockGame.getField());
+        new Fleet(mockGame.getField().getBoard()[0][0], mockGame.getPlayerByName("Player2"));
+        new Fleet(mockGame.getField().getBoard()[1][1], mockGame.getPlayerByName("Player1"));
+
+        // Тестируем построение дерева с глубиной 1
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(mockGame, 1);
+
+        assertAll("Проверка состояния дерева с глубиной 1",
+                () -> assertEquals(2, stats.numNodes, "Должно быть 2 узла"),
+                () -> assertEquals(1, stats.maxDepth, "Максимальная глубина должна быть 1"),
+                () -> assertEquals(1.0, stats.branchingFactor, "Коэффициент ветвления должен быть 1.0")
+        );
+    }
+
+    @Test
+    void testBuildGameTreeWithLimitedDepth2() {
+        Game mockGame = new Game(new Field(5, new SymmetricalGenerator())) {
+            int moveCount = 0;
+            boolean moveExecuted = false;
+
+            @Override
+            public boolean isGameOver() {
+                return moveCount >= 5; // Игра заканчивается после 5-го хода
+            }
+
+            @Override
+            public String isWinner() {
+                return "победитель не существует";
+            }
+
+            @Override
+            public List<Move> availableMoves(String player) {
+                return List.of(new Move(null, null, Move.MoveType.SKIP, new ArrayList<>(), 0)); // Один ход
+            }
+
+            @Override
+            public void getPlayerAction(Move move, String player) {
+                if (!moveExecuted) {
+                    moveCount++;
+                    moveExecuted = true;
+                }
+            }
+
+            @Override
+            public Game getCopy() {
+                moveExecuted = false;
+                return this;
+            }
+
+            @Override
+            public String getStateIdentifier() {
+                return "state-" + moveCount;
+            }
+        };
+
+        // Настройка игры
+        mockGame.startGameSession("game-depth-2");
+        mockGame.connectingPlayer("Player1");
+        mockGame.connectingPlayer("Player2");
+        mockGame.gameStarted(mockGame.getField());
+        new Fleet(mockGame.getField().getBoard()[0][0], mockGame.getPlayerByName("Player2"));
+        new Fleet(mockGame.getField().getBoard()[1][1], mockGame.getPlayerByName("Player1"));
+
+        // Тестируем построение дерева с глубиной 2
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(mockGame, 2);
+
+        assertAll("Проверка состояния дерева с глубиной 2",
+                () -> assertEquals(3, stats.numNodes, "Должно быть 3 узла"),
+                () -> assertEquals(2, stats.maxDepth, "Максимальная глубина должна быть 2"),
+                () -> assertEquals(1.0, stats.branchingFactor, "Коэффициент ветвления должен быть 1.0")
+        );
+    }
+
+    @Test
+    void testBuildGameTreeWithLimitedDepth3() {
+        Game mockGame = new Game(new Field(5, new SymmetricalGenerator())) {
+            int moveCount = 0;
+            boolean moveExecuted = false;
+
+            @Override
+            public boolean isGameOver() {
+                return moveCount >= 5; // Игра заканчивается после 5-го хода
+            }
+
+            @Override
+            public String isWinner() {
+                return "победитель не существует";
+            }
+
+            @Override
+            public List<Move> availableMoves(String player) {
+                return List.of(new Move(null, null, Move.MoveType.SKIP, new ArrayList<>(), 0)); // Один ход
+            }
+
+            @Override
+            public void getPlayerAction(Move move, String player) {
+                if (!moveExecuted) {
+                    moveCount++;
+                    moveExecuted = true;
+                }
+            }
+
+            @Override
+            public Game getCopy() {
+                moveExecuted = false;
+                return this;
+            }
+
+            @Override
+            public String getStateIdentifier() {
+                return "state-" + moveCount;
+            }
+        };
+
+        // Настройка игры
+        mockGame.startGameSession("game-depth-3");
+        mockGame.connectingPlayer("Player1");
+        mockGame.connectingPlayer("Player2");
+        mockGame.gameStarted(mockGame.getField());
+        new Fleet(mockGame.getField().getBoard()[0][0], mockGame.getPlayerByName("Player2"));
+        new Fleet(mockGame.getField().getBoard()[1][1], mockGame.getPlayerByName("Player1"));
+
+        // Тестируем построение дерева с глубиной 3
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(mockGame, 3);
+
+        assertAll("Проверка состояния дерева с глубиной 3",
+                () -> assertEquals(4, stats.numNodes, "Должно быть 4 узла"),
+                () -> assertEquals(3, stats.maxDepth, "Максимальная глубина должна быть 3"),
+                () -> assertEquals(1.0, stats.branchingFactor, "Коэффициент ветвления должен быть 1.0")
+        );
+    }
+    @Test
+    public void testBuildGameTreeWithDepth() {
+        // Создание игрового поля и начальной конфигурации
+        Field field = new Field(3, new TreeBuilderGenerator());
+        Game game = new Game(field);
+
+        // Инициализация игроков
+        game.startGameSession("0000");
+        game.connectingPlayer("Player1");
+        game.connectingPlayer("Player2");
+        game.gameStarted(field);
+
+        List<Ship.ShipType> startShips = new ArrayList<>();
+        startShips.add(Ship.ShipType.BASIC);
+        game.createShips(startShips, game.getPlayerByName("Player1").getName());
+        game.createShips(startShips, game.getPlayerByName("Player2").getName());
+
+        // Проверяем, что игра не закончена
+        assertFalse(game.isGameOver(), "Игра должна продолжаться");
+
+        // Строим дерево игры и получаем статистику
+        TreeBuilder.Stats stats = TreeBuilder.buildGameTree(game, 3);
+
+        // Проверяем статистику
+        assertNotNull(stats);
+        assertTrue(stats.numNodes > 0, "Количество узлов должно быть больше 0");
+        assertTrue(stats.numTerminalNodes >= 0, "Количество терминальных узлов должно быть неотрицательным");
+        assertTrue(stats.maxDepth >= 0, "Максимальная глубина должна быть неотрицательной");
+        assertTrue(stats.branchingFactor >= 0, "Коэффициент ветвления должен быть неотрицательным");
+        assertTrue(stats.workTimeMS >= 0, "Время работы должно быть неотрицательным");
+
+        System.out.println(stats);
+    }
 }

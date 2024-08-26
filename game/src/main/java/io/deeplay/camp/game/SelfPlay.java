@@ -63,8 +63,8 @@ public class SelfPlay implements GalaxyListener {
 
         List<Ship.ShipType> startShips = new ArrayList<>();
         startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
-        startShips.add(Ship.ShipType.BASIC);
+        //startShips.add(Ship.ShipType.BASIC);
+        //startShips.add(Ship.ShipType.BASIC);
 //        startShips.add(Ship.ShipType.BASIC);
 //        startShips.add(Ship.ShipType.BASIC);
 
